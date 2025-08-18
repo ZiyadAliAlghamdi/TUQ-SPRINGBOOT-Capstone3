@@ -27,7 +27,7 @@ public class BillboardService {
         if (billboard1 == null){
             throw new ApiException("Billboard with id " + id + " not found");
         }
-        billboard1.setTitle(billboard.getTitle());
+                billboard1.setTitle(billboard.getTitle());
         billboard1.setAddress(billboard.getAddress());
         billboard1.setLat(billboard.getLat());
         billboard1.setLng(billboard.getLng());

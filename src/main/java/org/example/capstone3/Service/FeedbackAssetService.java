@@ -23,7 +23,7 @@ public class FeedbackAssetService {
     }
 
     public void updateFeedbackAsset(Integer id , FeedbackAsset feedbackAsset){
-        FeedbackAsset feedbackAsset1 = feedbackAssetRepository.findFeedback_AssetById(id);
+        FeedbackAsset feedbackAsset1 = feedbackAssetRepository.findFeedbackAssetById(id);
         if (feedbackAsset1 == null){
             throw new ApiException("Feedback Asset with id " + id + " not found");
         }
@@ -36,7 +36,7 @@ public class FeedbackAssetService {
     }
 
     public void deleteFeedbackAsset(Integer id){
-        FeedbackAsset feedbackAsset = feedbackAssetRepository.findFeedback_AssetById(id);
+        FeedbackAsset feedbackAsset = feedbackAssetRepository.findFeedbackAssetById(id);
         if (feedbackAsset == null){
             throw new ApiException("Feedback Asset with id " + id + " not found");
         }

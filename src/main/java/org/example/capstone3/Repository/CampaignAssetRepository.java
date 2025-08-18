@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CampaignAssetRepository extends JpaRepository<CampaignAsset, Integer> {
-    CampaignAsset findCampaign_AssetById(Integer id);
+    CampaignAsset findCampaignAssetById(Integer id);
 }

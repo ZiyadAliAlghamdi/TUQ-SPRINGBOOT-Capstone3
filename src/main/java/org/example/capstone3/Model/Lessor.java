@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,4 +42,10 @@ public class Lessor {
     @NotNull(message = "rent count cannot be null")
     @Column(columnDefinition = "int not null")
     private Integer rentCount;
+
+    @OneToMany(mappedBy = "lessor", cascade = CascadeType.ALL)
+    private Set<Billboard> billboards;
+
+    @OneToMany(mappedBy = "lessor", cascade = CascadeType.ALL)
+    private Set<Feedback> feedbacks;
 }

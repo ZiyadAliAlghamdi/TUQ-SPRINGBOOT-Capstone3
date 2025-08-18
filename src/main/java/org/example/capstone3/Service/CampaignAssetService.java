@@ -23,7 +23,7 @@ public class CampaignAssetService {
     }
 
     public void updateCampaignAsset(Integer id , CampaignAsset campaignAsset){
-        CampaignAsset campaignAsset1 = campaignAssetRepository.findCampaign_AssetById(id);
+        CampaignAsset campaignAsset1 = campaignAssetRepository.findCampaignAssetById(id);
         if (campaignAsset1 == null){
             throw new ApiException("Campaign Asset with id " + id + " not found");
         }
@@ -36,7 +36,7 @@ public class CampaignAssetService {
     }
 
     public void deleteCampaignAsset(Integer id){
-        CampaignAsset campaignAsset = campaignAssetRepository.findCampaign_AssetById(id);
+        CampaignAsset campaignAsset = campaignAssetRepository.findCampaignAssetById(id);
         if (campaignAsset == null){
             throw new ApiException("Campaign Asset with id " + id + " not found");
         }

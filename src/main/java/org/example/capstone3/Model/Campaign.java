@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,17 @@ public class Campaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer advertiserId;
+    @ManyToOne
+    private Advertiser advertiser;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private Set<CampaignAsset> campaignAssets;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private Set<Booking> bookings;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private Set<Feedback> feedbacks;
 
     @NotEmpty(message = "name cannot be empty")
     @Column(columnDefinition = "varchar(50) not null")

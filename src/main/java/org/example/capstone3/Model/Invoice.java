@@ -19,7 +19,9 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer bookingId;
+    @ManyToOne
+    @JoinColumn(name = "booking_id", referencedColumnName = "id")
+    private Booking booking;
 
     @NotNull(message = "amount due cannot be null")
     @Column(columnDefinition = "decimal(10,2) not null")

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeedbackAssetRepository extends JpaRepository<FeedbackAsset, Integer> {
-    FeedbackAsset findFeedback_AssetById(Integer id);
+    FeedbackAsset findFeedbackAssetById(Integer id);
 }

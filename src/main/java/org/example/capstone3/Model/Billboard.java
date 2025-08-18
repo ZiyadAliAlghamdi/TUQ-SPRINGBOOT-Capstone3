@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,12 @@ public class Billboard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer lessorId;
+    @ManyToOne
+    @JoinColumn(name = "lessor_id", referencedColumnName = "id")
+    private Lessor lessor;
+
+    @OneToMany(mappedBy = "billboard", cascade = CascadeType.ALL)
+    private Set<Booking> bookings;
 
     @NotEmpty(message = "title cannot be empty")
     @Column(columnDefinition = "varchar(50) not null")

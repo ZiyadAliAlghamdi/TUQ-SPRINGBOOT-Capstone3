@@ -17,7 +17,9 @@ public class FeedbackAsset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer feedbackId;
+    @ManyToOne
+    @JoinColumn(name = "feedback_id", referencedColumnName = "id")
+    private Feedback feedback;
 
     @NotEmpty(message = "asset type cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")

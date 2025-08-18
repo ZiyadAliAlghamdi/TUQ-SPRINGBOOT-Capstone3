@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,9 +20,19 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer campaignId;
+    @ManyToOne
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    private Campaign campaign;
 
-    private Integer billboardId;
+    @ManyToOne
+    @JoinColumn(name = "billboard_id", referencedColumnName = "id")
+    private Billboard billboard;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Set<Invoice> invoices;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Set<Feedback> feedbacks;
 
     @NotNull(message = "start date cannot be null")
     @FutureOrPresent(message = "start date must be in the present or future")

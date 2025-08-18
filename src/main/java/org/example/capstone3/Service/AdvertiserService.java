@@ -31,7 +31,6 @@ public class AdvertiserService {
         advertiser1.setBrandName(advertiser.getBrandName());
         advertiser1.setPaymentMethod(advertiser.getPaymentMethod());
         advertiser1.setNotes(advertiser.getNotes());
-        advertiser1.setLeaseCount(advertiser.getLeaseCount());
         advertiserRepository.save(advertiser1);
     }
 

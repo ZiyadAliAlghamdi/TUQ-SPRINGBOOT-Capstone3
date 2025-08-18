@@ -32,7 +32,6 @@ public class LessorService {
         lessor1.setOperatingRegions(lessor.getOperatingRegions());
         lessor1.setContentRestrictions(lessor.getContentRestrictions());
         lessor1.setRatingAvg(lessor.getRatingAvg());
-        lessor1.setRentCount(lessor.getRentCount());
         lessorRepository.save(lessor1);
     }
 

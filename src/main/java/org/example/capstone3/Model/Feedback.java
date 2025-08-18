@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,13 +19,24 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer advertiserId;
+    @ManyToOne
+    @JoinColumn(name = "advertiser_id", referencedColumnName = "id")
+    private Advertiser advertiser;
 
-    private Integer lessorId;
+    @ManyToOne
+    @JoinColumn(name = "lessor_id", referencedColumnName = "id")
+    private Lessor lessor;
 
-    private Integer campaignId;
+    @ManyToOne
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    private Campaign campaign;
 
-    private Integer bookingId;
+    @ManyToOne
+    @JoinColumn(name = "booking_id", referencedColumnName = "id")
+    private Booking booking;
+
+    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
+    private Set<FeedbackAsset> feedbackAssets;
 
     @NotEmpty(message = "type cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")

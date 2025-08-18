@@ -17,7 +17,9 @@ public class CampaignAsset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer campaignId;
+        @ManyToOne
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    private Campaign campaign;
 
     @NotEmpty(message = "asset type cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")

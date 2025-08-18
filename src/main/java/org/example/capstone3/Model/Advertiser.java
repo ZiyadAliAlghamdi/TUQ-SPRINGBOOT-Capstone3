@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,7 +39,9 @@ public class Advertiser {
     @Column(columnDefinition = "varchar(100)")
     private String notes;
 
-    @NotNull(message = "lease count cannot be null")
-    @Column(columnDefinition = "int not null")
-    private Integer leaseCount;
+    @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
+    private Set<Campaign> campaigns;
+
+    @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
+    private Set<Feedback> feedbacks;
 }

@@ -30,6 +30,9 @@ public class FeedbackService {
         feedback1.setType(feedback.getType());
         feedback1.setScore(feedback.getScore());
         feedback1.setComment(feedback.getComment());
+        feedback1.setType(feedback.getType());
+        feedback1.setScore(feedback.getScore());
+        feedback1.setComment(feedback.getComment());
         feedback1.setCreatedAt(feedback.getCreatedAt());
         feedbackRepository.save(feedback1);
     }
