@@ -22,4 +22,9 @@ public class CampaignDTO {
     @NotEmpty(message = "objective cannot be empty")
     @Column(columnDefinition = "varchar(100) not null")
     private String objective;
+
+    @NotNull(message = "Campaign latitude is required!")
+    private Double lat;
+    @NotNull(message = "Campaign longitude is required!")
+    private Double lng;
 }

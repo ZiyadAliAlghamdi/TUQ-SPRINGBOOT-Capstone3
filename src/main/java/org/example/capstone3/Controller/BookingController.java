@@ -37,4 +37,16 @@ public class BookingController {
         bookingService.deleteBooking(id);
         return ResponseEntity.status(200).body(new ApiResponse("Booking deleted successfully"));
     }
+
+    @GetMapping("/{lessorId}/bookings/pending")
+    public ResponseEntity<?> getPendingBookings(@PathVariable Integer lessorId) {
+        return ResponseEntity.status(200).body(bookingService.findPendingBookings(lessorId));
+    }
+
+    @PostMapping("/{lessorId}/bookings/{bookingId}/accept")
+    public ResponseEntity<?> acceptBooking(@PathVariable Integer lessorId, @PathVariable Integer bookingId) {
+        bookingService.acceptBooking(lessorId, bookingId);
+        return ResponseEntity.status(200).body(new ApiResponse("Booking Accepted"));
+    }
+
 }

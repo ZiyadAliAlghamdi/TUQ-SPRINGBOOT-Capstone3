@@ -2,7 +2,9 @@ package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
+import org.example.capstone3.Model.Booking;
 import org.example.capstone3.Model.Lessor;
+import org.example.capstone3.Repository.BookingRepository;
 import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,6 @@ import java.util.List;
 public class LessorService {
 
     private final LessorRepository lessorRepository;
-
     public List<Lessor> getAllLessor(){
         return lessorRepository.findAll();
     }
@@ -23,16 +24,16 @@ public class LessorService {
     }
 
     public void updateLessor(Integer id , Lessor lessor){
-        Lessor lessor1 = lessorRepository.findLessorById(id);
-        if (lessor1 == null){
+        Lessor oldLessor = lessorRepository.findLessorById(id);
+        if (oldLessor == null){
             throw new ApiException("Lessor with id " + id + " not found");
         }
-        lessor1.setBusinessName(lessor.getBusinessName());
-        lessor1.setEmail(lessor.getEmail());
-        lessor1.setOperatingRegions(lessor.getOperatingRegions());
-        lessor1.setContentRestrictions(lessor.getContentRestrictions());
-        lessor1.setRatingAvg(lessor.getRatingAvg());
-        lessorRepository.save(lessor1);
+        oldLessor.setBusinessName(lessor.getBusinessName());
+        oldLessor.setEmail(lessor.getEmail());
+        oldLessor.setOperatingRegions(lessor.getOperatingRegions());
+        oldLessor.setContentRestrictions(lessor.getContentRestrictions());
+        oldLessor.setRatingAvg(lessor.getRatingAvg());
+        lessorRepository.save(oldLessor);
     }
 
     public void deleteLessor(Integer id){
@@ -42,4 +43,6 @@ public class LessorService {
         }
         lessorRepository.delete(lessor);
     }
+
+
 }
