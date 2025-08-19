@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -17,6 +18,7 @@ public class Campaign {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     private Advertiser advertiser;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
