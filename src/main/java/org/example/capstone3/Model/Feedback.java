@@ -28,9 +28,11 @@ public class Feedback {
     private Lessor lessor;
 
     @ManyToOne
+    @JsonIgnore
     private Campaign campaign;
 
     @ManyToOne
+    @JsonIgnore
     private Booking booking;
 
     @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
