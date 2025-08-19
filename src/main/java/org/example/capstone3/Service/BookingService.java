@@ -6,9 +6,11 @@ import org.example.capstone3.DTO.BookingDTO;
 import org.example.capstone3.Model.Billboard;
 import org.example.capstone3.Model.Booking;
 import org.example.capstone3.Model.Campaign;
+import org.example.capstone3.Model.Lessor;
 import org.example.capstone3.Repository.BillboardRepository;
 import org.example.capstone3.Repository.BookingRepository;
 import org.example.capstone3.Repository.CampaignRepository;
+import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,15 +25,24 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BillboardRepository billboardRepository;
     private final CampaignRepository campaignRepository;
+    private final LessorRepository lessorRepository;
     public List<Booking> getAllBooking(){
         return bookingRepository.findAll();
     }
 
     public void addBooking(BookingDTO bookingDTO){
+
         Billboard billboard = billboardRepository.findBillboardById(bookingDTO.getBillboard_id());
         Campaign campaign  = campaignRepository.findCampaignById(bookingDTO.getCampaign_id());
         if(billboard == null || campaign ==null)
             throw new ApiException("Billboard/campaign not found");
+        LocalDate dateNow = LocalDate.now();
+
+        if(campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
+            throw new ApiException("Verification Expired!");
+
+
+
         Booking booking = new Booking();
         booking.setBillboard(billboard);
         booking.setCampaign(campaign);
@@ -76,16 +87,23 @@ public class BookingService {
 
 
     public void acceptBooking(Integer lessorId, Integer bookingId) {
-        Booking booking = bookingRepository
-                .findByIdAndBillboard_Lessor_Id(bookingId, lessorId)
-                .orElseThrow(() -> new ApiException("Booking not found or not owned by you"));
+        Booking booking = bookingRepository.findByIdAndBillboard_Lessor_Id(bookingId, lessorId);
+        Lessor lessor = lessorRepository.findLessorById(lessorId);
+        if(lessor == null)
+            throw new ApiException("Lessor not found");
+
+        if(booking == null)
+            throw new ApiException("Booking not found or not owned by you");
 
         if (!"lessor_pending".equals(booking.getStatus())) {
             throw new ApiException("Only pending bookings can be accepted");
         }
+        lessor.setRentCount(lessor.getRentCount() + 1);
 
         booking.setStatus("accepted_payment_pending");
         booking.setAcceptedAt(OffsetDateTime.now());
+
+        lessorRepository.save(lessor);
         bookingRepository.save(booking);
     }
 

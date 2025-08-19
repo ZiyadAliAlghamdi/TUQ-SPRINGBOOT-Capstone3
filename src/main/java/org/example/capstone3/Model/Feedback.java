@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -50,6 +51,7 @@ public class Feedback {
     @Column(columnDefinition = "varchar(255) not null")
     private String comment;
 
+    @CreationTimestamp
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime createdAt;
 }
