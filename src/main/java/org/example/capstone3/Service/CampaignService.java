@@ -25,7 +25,7 @@ public class CampaignService {
         Advertiser advertiser = advertiserRepository.findAdvertiserById(campaignDTO.getAdvertiser_id());
         if(advertiser == null)
             throw new ApiException("Advertiser Not Found");
-        Campaign campaign = new Campaign(null,advertiser,null,null,null,campaignDTO.getName(),campaignDTO.getObjective());
+        Campaign campaign = new Campaign(null,advertiser,null,null,null,campaignDTO.getName(),campaignDTO.getObjective(),campaignDTO.getLat(),campaignDTO.getLng());
 
         campaignRepository.save(campaign);
     }
@@ -37,6 +37,8 @@ public class CampaignService {
         }
         oldCampaign.setName(campaign.getName());
         oldCampaign.setObjective(campaign.getObjective());
+        oldCampaign.setLat(campaign.getLat());
+        oldCampaign.setLng(campaign.getLng());
         campaignRepository.save(oldCampaign);
     }
 

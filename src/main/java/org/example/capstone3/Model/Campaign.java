@@ -2,7 +2,6 @@ package org.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.util.Set;
@@ -30,11 +29,17 @@ public class Campaign {
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
     private Set<Feedback> feedbacks;
 
-    @NotEmpty(message = "name cannot be empty")
     @Column(columnDefinition = "varchar(50) not null")
     private String name;
 
-    @NotEmpty(message = "objective cannot be empty")
+
     @Column(columnDefinition = "varchar(100) not null")
     private String objective;
+
+
+    @Column(columnDefinition = "decimal(9,6) not null")
+    private Double lat;
+
+    @Column(columnDefinition = "decimal(9,6) not null")
+    private Double lng;
 }
