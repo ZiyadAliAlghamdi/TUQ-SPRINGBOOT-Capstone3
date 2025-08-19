@@ -30,7 +30,7 @@ public class CampaignAssetService {
         campaignAsset1.setAssetType(campaignAsset.getAssetType());
         campaignAsset1.setMimeType(campaignAsset.getMimeType());
         campaignAsset1.setFileName(campaignAsset.getFileName());
-        campaignAsset1.setBlob(campaignAsset.getBlob());
+        campaignAsset1.setFileContent(campaignAsset.getFileContent());
         campaignAsset1.setCreatedAt(campaignAsset.getCreatedAt());
         campaignAssetRepository.save(campaignAsset1);
     }

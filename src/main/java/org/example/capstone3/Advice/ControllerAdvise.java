@@ -48,4 +48,5 @@ public class ControllerAdvise {
         String message = methodArgumentTypeMismatchException.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
+
 }

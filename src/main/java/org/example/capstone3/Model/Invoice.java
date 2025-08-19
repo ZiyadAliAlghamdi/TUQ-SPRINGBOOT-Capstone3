@@ -1,16 +1,16 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -20,7 +20,7 @@ public class Invoice {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id", referencedColumnName = "id")
+    @JsonIgnore
     private Booking booking;
 
     @NotNull(message = "amount due cannot be null")
