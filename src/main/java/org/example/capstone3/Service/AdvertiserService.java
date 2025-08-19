@@ -30,7 +30,6 @@ public class AdvertiserService {
         advertiser1.setCompanyName(advertiser.getCompanyName());
         advertiser1.setBrandName(advertiser.getBrandName());
         advertiser1.setPaymentMethod(advertiser.getPaymentMethod());
-        advertiser1.setNotes(advertiser.getNotes());
         advertiserRepository.save(advertiser1);
     }
 
