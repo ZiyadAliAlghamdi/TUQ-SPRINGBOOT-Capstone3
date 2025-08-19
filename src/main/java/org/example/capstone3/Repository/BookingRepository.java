@@ -14,5 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findByStatusAndBillboard_Lessor_Id(String status, Integer LessorId);
 
-    Optional<Booking> findByIdAndBillboard_Lessor_Id(Integer bookingId, Integer lessorId);
+    Booking findByIdAndBillboard_Lessor_Id(Integer bookingId, Integer lessorId);
+
+
 }

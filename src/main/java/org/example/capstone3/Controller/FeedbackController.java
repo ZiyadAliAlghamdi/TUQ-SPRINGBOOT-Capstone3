@@ -3,6 +3,7 @@ package org.example.capstone3.Controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
+import org.example.capstone3.DTO.FeedbackDTO;
 import org.example.capstone3.Model.Feedback;
 import org.example.capstone3.Service.FeedbackService;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +21,15 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(feedbackService.getAllFeedback());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addFeedback(@RequestBody @Valid Feedback feedback){
-        feedbackService.addFeedback(feedback);
+    @PostMapping("/create")
+    public ResponseEntity<?> createFeedback(@RequestBody @Valid FeedbackDTO feedbackDTO){
+        feedbackService.addFeedback(feedbackDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback added successfully"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateFeedback(@PathVariable Integer id, @RequestBody @Valid Feedback feedback){
-        feedbackService.updateFeedback(id, feedback);
+    public ResponseEntity<?> updateFeedback(@PathVariable Integer id, @RequestBody @Valid FeedbackDTO feedbackDTO){
+        feedbackService.updateFeedback(id, feedbackDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback updated successfully"));
     }
 

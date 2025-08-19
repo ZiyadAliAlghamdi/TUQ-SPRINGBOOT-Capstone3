@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -34,8 +35,7 @@ public class Advertiser {
     @Column(columnDefinition = "varchar(20) not null")
     private String paymentMethod;
 
-    @Column(columnDefinition = "varchar(100)")
-    private String notes;
+    private LocalDate expiryDate;
 
     @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
     private Set<Campaign> campaigns;

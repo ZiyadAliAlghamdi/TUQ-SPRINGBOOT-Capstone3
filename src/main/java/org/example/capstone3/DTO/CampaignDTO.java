@@ -27,4 +27,5 @@ public class CampaignDTO {
     private Double lat;
     @NotNull(message = "Campaign longitude is required!")
     private Double lng;
+
 }
