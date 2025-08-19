@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -20,19 +21,17 @@ public class Feedback {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "advertiser_id", referencedColumnName = "id")
+    @JsonIgnore
     private Advertiser advertiser;
 
     @ManyToOne
-    @JoinColumn(name = "lessor_id", referencedColumnName = "id")
+    @JsonIgnore
     private Lessor lessor;
 
     @ManyToOne
-    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
     private Campaign campaign;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id", referencedColumnName = "id")
     private Booking booking;
 
     @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)

@@ -42,12 +42,6 @@ public class ControllerAdvise {
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 
-    //http payload not readable
-    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<?> HttpMessageNotReadableException(HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException){
-        String message = httpRequestMethodNotSupportedException.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(message));
-    }
 
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> MethodArgsTypeMismatch(MethodArgumentTypeMismatchException methodArgumentTypeMismatchException){

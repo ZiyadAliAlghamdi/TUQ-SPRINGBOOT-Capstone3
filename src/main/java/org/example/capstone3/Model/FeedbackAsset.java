@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class FeedbackAsset {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "feedback_id", referencedColumnName = "id")
+    @JsonIgnore
     private Feedback feedback;
 
     @NotEmpty(message = "asset type cannot be empty")
