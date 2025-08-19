@@ -2,7 +2,10 @@ package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
+import org.example.capstone3.DTO.CampaignDTO;
+import org.example.capstone3.Model.Advertiser;
 import org.example.capstone3.Model.Campaign;
+import org.example.capstone3.Repository.AdvertiserRepository;
 import org.example.capstone3.Repository.CampaignRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +16,28 @@ import java.util.List;
 public class CampaignService {
 
     private final CampaignRepository campaignRepository;
-
+    private final AdvertiserRepository advertiserRepository;
     public List<Campaign> getAllCampaign(){
         return campaignRepository.findAll();
     }
 
-    public void addCampaign(Campaign campaign){
+    public void addCampaign(CampaignDTO campaignDTO){
+        Advertiser advertiser = advertiserRepository.findAdvertiserById(campaignDTO.getAdvertiser_id());
+        if(advertiser == null)
+            throw new ApiException("Advertiser Not Found");
+        Campaign campaign = new Campaign(null,advertiser,null,null,null,campaignDTO.getName(),campaignDTO.getObjective());
+
         campaignRepository.save(campaign);
     }
 
     public void updateCampaign(Integer id , Campaign campaign){
-        Campaign campaign1 = campaignRepository.findCampaignById(id);
-        if (campaign1 == null){
+        Campaign oldCampaign = campaignRepository.findCampaignById(id);
+        if (oldCampaign == null){
             throw new ApiException("Campaign with id " + id + " not found");
         }
-        campaign1.setName(campaign.getName());
-        campaign1.setObjective(campaign.getObjective());
-        campaign1.setStatus(campaign.getStatus());
-        campaignRepository.save(campaign1);
+        oldCampaign.setName(campaign.getName());
+        oldCampaign.setObjective(campaign.getObjective());
+        campaignRepository.save(oldCampaign);
     }
 
     public void deleteCampaign(Integer id){

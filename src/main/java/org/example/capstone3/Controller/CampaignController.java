@@ -3,6 +3,7 @@ package org.example.capstone3.Controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
+import org.example.capstone3.DTO.CampaignDTO;
 import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Service.CampaignService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class CampaignController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCampaign(@RequestBody @Valid Campaign campaign){
+    public ResponseEntity<?> addCampaign(@RequestBody @Valid CampaignDTO campaign){
         campaignService.addCampaign(campaign);
         return ResponseEntity.status(200).body(new ApiResponse("Campaign added successfully"));
     }

@@ -37,8 +37,4 @@ public class Campaign {
     @NotEmpty(message = "objective cannot be empty")
     @Column(columnDefinition = "varchar(100) not null")
     private String objective;
-
-    @NotEmpty(message = "status cannot be empty")
-    @Column(columnDefinition = "varchar(20) not null")
-    private String status;
 }
