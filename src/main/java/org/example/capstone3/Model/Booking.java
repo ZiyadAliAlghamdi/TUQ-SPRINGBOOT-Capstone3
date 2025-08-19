@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,24 +34,20 @@ public class Booking {
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private Set<Feedback> feedbacks;
 
-    @NotNull(message = "start date cannot be null")
-    @FutureOrPresent(message = "start date must be in the present or future")
+
     @Column(columnDefinition = "date not null")
     private LocalDate startDate;
 
-    @NotNull(message = "end date cannot be null")
-    @FutureOrPresent(message = "end date must be in the present or future")
     @Column(columnDefinition = "date not null")
     private LocalDate endDate;
 
-    @NotNull(message = "price total cannot be null")
     @Column(columnDefinition = "decimal(10,2) not null")
     private Double priceTotal;
 
-    @NotNull(message = "status cannot be null")
     @Column(columnDefinition = "varchar(20) not null")
     private String status;
 
+    @CreationTimestamp
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime createdAt;
 }
