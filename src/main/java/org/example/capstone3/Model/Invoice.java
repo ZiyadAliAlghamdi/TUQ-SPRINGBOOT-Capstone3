@@ -23,9 +23,34 @@ public class Invoice {
     @JsonIgnore
     private Booking booking;
 
-    @NotNull(message = "amount due cannot be null")
-    @Column(columnDefinition = "decimal(10,2) not null")
-    private Double amountDue;
+
+    //todo:invoice InDto
+    @NotEmpty(message = "cardName cannot be empty")
+    @Column(nullable = false)
+    private String cardName;
+
+    @NotEmpty(message = "cardNumber cannot be empty")
+    @Column(nullable = false)
+    private String cardNumber;
+
+    @NotEmpty(message = "cardCvc cannot be empty")
+    @Column(nullable = false)
+    private String cardCvc;
+
+    @NotEmpty(message = "cardMonth cannot be empty")
+    @Column(nullable = false)
+    private String cardMonth;
+
+    @NotEmpty(message = "cardYear cannot be null")
+    @Column(nullable = false)
+    private String cardYear;
+
+
+
+
+    @NotNull(message = "amount cannot be null")
+    @Column(nullable = false)
+    private Double amount;
 
     @NotEmpty(message = "currency cannot be empty")
     @Column(columnDefinition = "varchar(5) not null")
@@ -38,5 +63,5 @@ public class Invoice {
 
     @NotEmpty(message = "status cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
-    private String status;
+    private String status;  //todo from moyaser
 }
