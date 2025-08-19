@@ -2,6 +2,7 @@ package org.example.capstone3.DTO;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,5 +32,6 @@ public class BookingDTO
     private Double priceTotal;
 
     @NotNull(message = "status cannot be null")
+    @Pattern(regexp = "^(lessor_pending, accepted_payment_pending, approved, canceled)$")
     private String status;
 }

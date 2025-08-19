@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Setter
@@ -40,6 +41,9 @@ public class Booking {
 
     @Column(columnDefinition = "date not null")
     private LocalDate endDate;
+
+    private OffsetDateTime acceptedAt;
+
 
     @Column(columnDefinition = "decimal(10,2) not null")
     private Double priceTotal;

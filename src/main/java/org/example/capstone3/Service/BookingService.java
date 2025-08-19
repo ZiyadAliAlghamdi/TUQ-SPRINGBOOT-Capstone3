@@ -12,6 +12,7 @@ import org.example.capstone3.Repository.CampaignRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setBillboard(billboard);
         booking.setCampaign(campaign);
-        booking.setStatus("pending"); // todo: Need to talk about it
+        booking.setStatus("lessor_pending");
         booking.setStartDate(bookingDTO.getStartDate());
         booking.setEndDate(bookingDTO.getEndDate());
         booking.setPriceTotal(calculateTotalPricePerWeek(booking,billboard));
@@ -63,6 +64,33 @@ public class BookingService {
         bookingRepository.delete(booking);
     }
 
+    public List<Booking> findPendingBookings(Integer lessorId) {
+        List<Booking> results =
+                bookingRepository.findByStatusAndBillboard_Lessor_Id("lessor_pending", lessorId);
+
+        if (results.isEmpty()) {
+            throw new ApiException("No bookings found");
+        }
+        return results;
+    }
+
+
+    public void acceptBooking(Integer lessorId, Integer bookingId) {
+        Booking booking = bookingRepository
+                .findByIdAndBillboard_Lessor_Id(bookingId, lessorId)
+                .orElseThrow(() -> new ApiException("Booking not found or not owned by you"));
+
+        if (!"lessor_pending".equals(booking.getStatus())) {
+            throw new ApiException("Only pending bookings can be accepted");
+        }
+
+        booking.setStatus("accepted_payment_pending");
+        booking.setAcceptedAt(OffsetDateTime.now());
+        bookingRepository.save(booking);
+    }
+
+    //Helper Method
+
     public Double calculateTotalPricePerWeek(Booking booking, Billboard billboard) {
         if (booking == null || billboard == null) {
             throw new ApiException("startDate, endDate, and billboard are required");
@@ -74,4 +102,7 @@ public class BookingService {
 
         return weeks * billboard.getBasePricePerWeek();
     }
+
+
+
 }
