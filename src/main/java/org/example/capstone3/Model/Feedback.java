@@ -2,8 +2,7 @@ package org.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -39,15 +38,12 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
     private Set<FeedbackAsset> feedbackAssets;
 
-    @NotEmpty(message = "type cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String type;
 
-    @NotNull(message = "score cannot be null")
     @Column(columnDefinition = "int not null")
     private Integer score;
 
-    @NotEmpty(message = "comment cannot be empty")
     @Column(columnDefinition = "varchar(255) not null")
     private String comment;
 
