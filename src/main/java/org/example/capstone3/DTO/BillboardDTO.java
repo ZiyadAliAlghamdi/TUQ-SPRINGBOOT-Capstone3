@@ -2,8 +2,11 @@ package org.example.capstone3.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-
+@Setter
+@Getter
+@AllArgsConstructor
 public class BillboardDTO {
 
 
