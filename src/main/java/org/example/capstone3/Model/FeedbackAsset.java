@@ -3,13 +3,12 @@ package org.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,9 +33,9 @@ public class FeedbackAsset {
     @Column(columnDefinition = "varchar(50) not null")
     private String fileName;
 
-    @Lob
-    @Column(columnDefinition = "longblob")
-    private byte[] blob;
+        @Lob
+    @Column(nullable = false)
+    private byte[] fileContent;
 
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime createdAt;

@@ -30,7 +30,7 @@ public class FeedbackAssetService {
         feedbackAsset1.setAssetType(feedbackAsset.getAssetType());
         feedbackAsset1.setMimeType(feedbackAsset.getMimeType());
         feedbackAsset1.setFileName(feedbackAsset.getFileName());
-        feedbackAsset1.setBlob(feedbackAsset.getBlob());
+        feedbackAsset1.setFileContent(feedbackAsset.getFileContent());
         feedbackAsset1.setCreatedAt(feedbackAsset.getCreatedAt());
         feedbackAssetRepository.save(feedbackAsset1);
     }
