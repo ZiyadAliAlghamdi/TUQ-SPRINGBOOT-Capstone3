@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,8 @@ public class CampaignAsset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-        @ManyToOne
-    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    @ManyToOne
+    @JsonIgnore
     private Campaign campaign;
 
     @NotEmpty(message = "asset type cannot be empty")
