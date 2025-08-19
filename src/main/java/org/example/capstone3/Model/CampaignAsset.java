@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,13 +22,6 @@ public class CampaignAsset {
     @JsonIgnore
     private Campaign campaign;
 
-    @NotEmpty(message = "asset type cannot be empty")
-    @Column(columnDefinition = "varchar(20) not null")
-    private String assetType;
-
-    @NotEmpty(message = "mime type cannot be empty")
-    @Column(columnDefinition = "varchar(50) not null")
-    private String mimeType;
 
     @NotEmpty(message = "filename cannot be empty")
     @Column(columnDefinition = "varchar(50) not null")
@@ -37,6 +31,7 @@ public class CampaignAsset {
     @Column(nullable = false)
     private byte[] fileContent;
 
+    @CreationTimestamp
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime createdAt;
 }
