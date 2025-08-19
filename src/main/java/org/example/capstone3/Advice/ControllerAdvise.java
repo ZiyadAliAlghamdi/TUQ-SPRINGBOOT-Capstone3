@@ -3,6 +3,7 @@ package org.example.capstone3.Advice;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Api.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.PlaceholderResolutionException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -46,6 +47,13 @@ public class ControllerAdvise {
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> MethodArgsTypeMismatch(MethodArgumentTypeMismatchException methodArgumentTypeMismatchException){
         String message = methodArgumentTypeMismatchException.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(message));
+    }
+
+
+    @ExceptionHandler(value = PlaceholderResolutionException.class)
+    public ResponseEntity<?> PlaceholderResolutionException(PlaceholderResolutionException placeholderResolutionException){
+        String message = placeholderResolutionException.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 
