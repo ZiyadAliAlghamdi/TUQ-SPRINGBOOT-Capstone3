@@ -30,8 +30,9 @@ public class Booking {
     @JsonIgnore
     private Billboard billboard;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Set<Invoice> invoices;
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Invoice invoices;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private Set<Feedback> feedbacks;
