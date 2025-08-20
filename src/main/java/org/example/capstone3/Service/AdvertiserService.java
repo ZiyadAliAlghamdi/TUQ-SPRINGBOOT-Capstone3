@@ -27,9 +27,11 @@ public class AdvertiserService {
         if (advertiser1 == null){
             throw new ApiException("Advertiser with id " + id + " not found");
         }
+        advertiser1.setEmail(advertiser.getEmail());
         advertiser1.setCompanyName(advertiser.getCompanyName());
         advertiser1.setBrandName(advertiser.getBrandName());
         advertiser1.setPaymentMethod(advertiser.getPaymentMethod());
+        advertiser1.setExpiryDate(advertiser.getExpiryDate());
         advertiserRepository.save(advertiser1);
     }
 
