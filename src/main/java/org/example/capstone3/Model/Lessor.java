@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 
 import java.util.Set;
@@ -19,27 +20,25 @@ public class Lessor {
     private Integer id;
 
     @NotEmpty(message = "business name cannot be empty")
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(255) not null")
     private String businessName;
 
     @NotEmpty(message = "email cannot be empty")
     @Email(message = "please enter a valid email")
-    @Column(columnDefinition = "varchar(30) not null unique")
+    @Column(columnDefinition = "varchar(255) not null unique")
     private String email;
 
     @NotEmpty(message = "operating regions cannot be empty")
-    @Column(columnDefinition = "varchar(50) not null")
+    @Column(columnDefinition = "varchar(255) not null")
     private String operatingRegions;
 
-    @Column(columnDefinition = "varchar(100)")
+    @NotEmpty(message = "Content Restrictions is required")
+    @Column(columnDefinition = "varchar(255)")
     private String contentRestrictions;
 
-    @NotNull(message = "rating average cannot be null")
-    @Column(columnDefinition = "decimal(3,2) not null")
+    @Column(columnDefinition = "decimal")
     private Double ratingAvg;
-
-    @NotNull(message = "rent count cannot be null")
-    @Column(columnDefinition = "int not null")
+    @Column(columnDefinition = "int")
     private Integer rentCount;
 
     @OneToMany(mappedBy = "lessor", cascade = CascadeType.ALL)

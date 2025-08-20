@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class BookingService {
             throw new ApiException("Billboard/campaign not found");
         LocalDate dateNow = LocalDate.now();
 
-        if(campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
+        if(!campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
             throw new ApiException("Verification Expired!");
 
 
@@ -62,8 +63,6 @@ public class BookingService {
         }
         oldBooking.setStartDate(booking.getStartDate());
         oldBooking.setEndDate(booking.getEndDate());
-        oldBooking.setPriceTotal(booking.getPriceTotal());
-        oldBooking.setStatus(booking.getStatus());
         bookingRepository.save(oldBooking);
     }
 
@@ -109,17 +108,28 @@ public class BookingService {
 
     //Helper Method
 
-    public Double calculateTotalPricePerWeek(Booking booking, Billboard billboard) {
+    public double calculateTotalPricePerWeek(Booking booking, Billboard billboard) {
         if (booking == null || billboard == null) {
-            throw new ApiException("startDate, endDate, and billboard are required");
+            throw new ApiException("booking and billboard are required");
         }
-        if (booking.getEndDate().isBefore(booking.getStartDate())) {
+
+        LocalDate start = Objects.requireNonNull(booking.getStartDate(), "startDate is required");
+        LocalDate end   = Objects.requireNonNull(booking.getEndDate(),   "endDate is required");
+        if (end.isBefore(start)) {
             throw new ApiException("endDate must be on or after startDate");
         }
-        long weeks = ChronoUnit.WEEKS.between(booking.getStartDate(), booking.getEndDate());
 
-        return weeks * billboard.getBasePricePerWeek();
+        Double weeklyPrice = Objects.requireNonNull(billboard.getBasePricePerWeek(), "basePricePerWeek is required");
+        if (weeklyPrice <= 0) {
+            throw new ApiException("basePricePerWeek must be > 0");
+        }
+
+        long daysInclusive = ChronoUnit.DAYS.between(start, end) + 1;  // inclusive range
+        long weeksToBill = (long) Math.ceil(daysInclusive / 7.0);      // charge started weeks
+
+        return weeksToBill * weeklyPrice;
     }
+
 
 
 

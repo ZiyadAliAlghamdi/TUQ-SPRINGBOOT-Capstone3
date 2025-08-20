@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -22,11 +23,11 @@ public class Booking {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    @JsonIgnore
     private Campaign campaign;
 
     @ManyToOne
-    @JoinColumn(name = "billboard_id", referencedColumnName = "id")
+    @JsonIgnore
     private Billboard billboard;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)

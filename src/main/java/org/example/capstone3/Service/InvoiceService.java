@@ -68,6 +68,10 @@ public class InvoiceService {
             throw new ApiException("booking is not found");
         }
 
+        if (!booking.getStatus().equalsIgnoreCase("accepted_payment_pending")){
+            throw new ApiException("cannot continue payment, booking status: "+booking.getStatus());
+        }
+
         String callbackUrl = "https://moyasar.com/thanks";
 
 
@@ -128,6 +132,7 @@ public class InvoiceService {
 
         Advertiser adv = booking.getCampaign().getAdvertiser();
         String to = adv.getEmail();
+
 
 
         byte[] pdf = invoicePdfBuilder.build(
