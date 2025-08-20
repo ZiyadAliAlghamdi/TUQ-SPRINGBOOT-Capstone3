@@ -49,7 +49,7 @@ public class Booking {
     private Double priceTotal;
 
     @Column(columnDefinition = "varchar(20) not null")
-    private String status;
+    private String status;  //todo : status(lessor_pending, payment_pending, approved, canceled)
 
     @CreationTimestamp
     @Column(columnDefinition = "datetime not null")
