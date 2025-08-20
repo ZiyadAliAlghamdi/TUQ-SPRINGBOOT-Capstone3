@@ -2,10 +2,20 @@ package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
+import org.example.capstone3.DTO.BookingDTO;
+import org.example.capstone3.Model.Billboard;
 import org.example.capstone3.Model.Booking;
+import org.example.capstone3.Model.Campaign;
+import org.example.capstone3.Model.Lessor;
+import org.example.capstone3.Repository.BillboardRepository;
 import org.example.capstone3.Repository.BookingRepository;
+import org.example.capstone3.Repository.CampaignRepository;
+import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -13,26 +23,48 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-
+    private final BillboardRepository billboardRepository;
+    private final CampaignRepository campaignRepository;
+    private final LessorRepository lessorRepository;
     public List<Booking> getAllBooking(){
         return bookingRepository.findAll();
     }
 
-    public void addBooking(Booking booking){
+    public void addBooking(BookingDTO bookingDTO){
+
+        Billboard billboard = billboardRepository.findBillboardById(bookingDTO.getBillboard_id());
+        Campaign campaign  = campaignRepository.findCampaignById(bookingDTO.getCampaign_id());
+        if(billboard == null || campaign ==null)
+            throw new ApiException("Billboard/campaign not found");
+        LocalDate dateNow = LocalDate.now();
+
+        if(campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
+            throw new ApiException("Verification Expired!");
+
+
+
+        Booking booking = new Booking();
+        booking.setBillboard(billboard);
+        booking.setCampaign(campaign);
+        booking.setStatus("lessor_pending");
+        booking.setStartDate(bookingDTO.getStartDate());
+        booking.setEndDate(bookingDTO.getEndDate());
+        booking.setPriceTotal(calculateTotalPricePerWeek(booking,billboard));
         bookingRepository.save(booking);
     }
 
-    public void updateBooking(Integer id , Booking booking){
-        Booking booking1 = bookingRepository.findBookingById(id);
-        if (booking1 == null){
+    public void updateBooking(Integer id , BookingDTO booking){
+
+        Booking oldBooking = bookingRepository.findBookingById(id);
+
+        if (oldBooking == null){
             throw new ApiException("Booking with id " + id + " not found");
         }
-        booking1.setStartDate(booking.getStartDate());
-        booking1.setEndDate(booking.getEndDate());
-        booking1.setPriceTotal(booking.getPriceTotal());
-        booking1.setStatus(booking.getStatus());
-        booking1.setCreatedAt(booking.getCreatedAt());
-        bookingRepository.save(booking1);
+        oldBooking.setStartDate(booking.getStartDate());
+        oldBooking.setEndDate(booking.getEndDate());
+        oldBooking.setPriceTotal(booking.getPriceTotal());
+        oldBooking.setStatus(booking.getStatus());
+        bookingRepository.save(oldBooking);
     }
 
     public void deleteBooking(Integer id){
@@ -42,4 +74,53 @@ public class BookingService {
         }
         bookingRepository.delete(booking);
     }
+
+    public List<Booking> findPendingBookings(Integer lessorId) {
+        List<Booking> results =
+                bookingRepository.findByStatusAndBillboard_Lessor_Id("lessor_pending", lessorId);
+
+        if (results.isEmpty()) {
+            throw new ApiException("No bookings found");
+        }
+        return results;
+    }
+
+
+    public void acceptBooking(Integer lessorId, Integer bookingId) {
+        Booking booking = bookingRepository.findByIdAndBillboard_Lessor_Id(bookingId, lessorId);
+        Lessor lessor = lessorRepository.findLessorById(lessorId);
+        if(lessor == null)
+            throw new ApiException("Lessor not found");
+
+        if(booking == null)
+            throw new ApiException("Booking not found or not owned by you");
+
+        if (!"lessor_pending".equals(booking.getStatus())) {
+            throw new ApiException("Only pending bookings can be accepted");
+        }
+        lessor.setRentCount(lessor.getRentCount() + 1);
+
+        booking.setStatus("accepted_payment_pending");
+        booking.setAcceptedAt(OffsetDateTime.now());
+
+        lessorRepository.save(lessor);
+        bookingRepository.save(booking);
+    }
+
+    //Helper Method
+
+    public Double calculateTotalPricePerWeek(Booking booking, Billboard billboard) {
+        if (booking == null || billboard == null) {
+            throw new ApiException("startDate, endDate, and billboard are required");
+        }
+        if (booking.getEndDate().isBefore(booking.getStartDate())) {
+            throw new ApiException("endDate must be on or after startDate");
+        }
+        long weeks = ChronoUnit.WEEKS.between(booking.getStartDate(), booking.getEndDate());
+
+        return weeks * billboard.getBasePricePerWeek();
+    }
+
+
+
 }

@@ -20,9 +20,9 @@ public class CampaignAssetController {
         return ResponseEntity.status(200).body(campaignAssetService.getAllCampaignAsset());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addCampaignAsset(@RequestBody @Valid CampaignAsset campaignAsset){
-        campaignAssetService.addCampaignAsset(campaignAsset);
+    @PostMapping("/add/{campaign_id}")
+    public ResponseEntity<?> addCampaignAsset(@PathVariable Integer campaign_id,@RequestBody @Valid CampaignAsset campaignAsset){
+        campaignAssetService.addCampaignAsset(campaign_id,campaignAsset);
         return ResponseEntity.status(200).body(new ApiResponse("Campaign Asset added successfully"));
     }
 
