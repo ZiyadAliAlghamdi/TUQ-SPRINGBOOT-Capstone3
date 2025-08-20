@@ -21,7 +21,8 @@ public class Campaign {
     private Advertiser advertiser;
 
 
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "campaign")
+
     private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)

@@ -16,10 +16,10 @@ import java.time.LocalDate;
 @Entity
 public class Invoice {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @OneToOne
+    @MapsId
     @JsonIgnore
     private Booking booking;
 
