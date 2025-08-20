@@ -36,8 +36,7 @@ public class BillboardService {
         billboard.setHeight(billboardDTO.getHeight());
         billboard.setAvailabilityStatus(billboardDTO.getAvailabilityStatus());
         billboard.setBasePricePerWeek(billboardDTO.getBasePricePerWeek());
-        billboard.setRatingAvg(0.0);
-        billboard.setRatingCount(0);
+
         billboardRepository.save(billboard);
     }
 

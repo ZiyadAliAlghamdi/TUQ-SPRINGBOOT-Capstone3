@@ -33,8 +33,8 @@ public class FeedbackAsset {
     @Column(columnDefinition = "varchar(50) not null")
     private String fileName;
 
-        @Lob
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "LONGBLOB",nullable = false)
     private byte[] fileContent;
 
     @Column(columnDefinition = "datetime not null")

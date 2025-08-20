@@ -20,8 +20,6 @@ public class Campaign {
     @JsonIgnore
     private Advertiser advertiser;
 
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
-    private Set<CampaignAsset> campaignAssets;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
     private Set<Booking> bookings;
@@ -42,4 +40,7 @@ public class Campaign {
 
     @Column(columnDefinition = "decimal(9,6) not null")
     private Double lng;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private Set<CampaignAsset> campaignAssets;
 }

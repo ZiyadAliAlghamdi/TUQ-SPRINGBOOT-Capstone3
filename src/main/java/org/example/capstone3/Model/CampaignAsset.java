@@ -28,7 +28,7 @@ public class CampaignAsset {
     private String fileName;
 
     @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "LONGBLOB",nullable = false)
     private byte[] fileContent;
 
     @CreationTimestamp

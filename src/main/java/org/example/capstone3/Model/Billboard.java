@@ -1,5 +1,6 @@
 package org.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ public class Billboard {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "lessor_id", referencedColumnName = "id")
     private Lessor lessor;
 
@@ -51,9 +53,5 @@ public class Billboard {
     @Column(columnDefinition = "decimal(10,2) not null")
     private Double basePricePerWeek;
 
-    @Column(columnDefinition = "decimal(3,2) not null")
-    private Double ratingAvg;
 
-    @Column(columnDefinition = "int not null")
-    private Integer ratingCount;
 }

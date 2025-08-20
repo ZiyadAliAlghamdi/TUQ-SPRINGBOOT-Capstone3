@@ -27,11 +27,4 @@ public class BookingDTO
     @NotNull(message = "end date cannot be null")
     @FutureOrPresent(message = "end date must be in the present or future")
     private LocalDate endDate;
-
-    @NotNull(message = "price total cannot be null")
-    private Double priceTotal;
-
-    @NotNull(message = "status cannot be null")
-    @Pattern(regexp = "^(lessor_pending, accepted_payment_pending, approved, canceled)$")
-    private String status;
 }

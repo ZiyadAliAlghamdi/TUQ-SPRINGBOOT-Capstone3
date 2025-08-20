@@ -7,7 +7,9 @@ import org.example.capstone3.Model.CampaignAsset;
 import org.example.capstone3.Repository.CampaignAssetRepository;
 import org.example.capstone3.Repository.CampaignRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,14 +22,24 @@ public class CampaignAssetService {
         return campaignAssetRepository.findAll();
     }
 
-    public void addCampaignAsset(Integer campaign_id,CampaignAsset campaignAsset){
+    public void addCampaignAsset(Integer campaign_id, MultipartFile file) throws IOException {
         Campaign campaign = campaignRepository.findCampaignById(campaign_id);
-
         if(campaign == null) {
             throw new ApiException("Campaign Not found");
         }
-        campaignAsset.setCampaign(campaign);
-        campaignAssetRepository.save(campaignAsset);
+        CampaignAsset asset = new CampaignAsset();
+        asset.setCampaign(campaign);
+        asset.setFileName(file.getOriginalFilename());
+        asset.setFileContent(file.getBytes());
+        campaignAssetRepository.save(asset);
+    }
+
+    public CampaignAsset getCampaignAssetById(Integer id){
+        CampaignAsset campaignAsset = campaignAssetRepository.findCampaignAssetById(id);
+        if(campaignAsset == null)
+            throw new ApiException("Campaign Asset Not Found");
+
+        return campaignAsset;
     }
 
     public void updateCampaignAsset(Integer id , CampaignAsset campaignAsset){

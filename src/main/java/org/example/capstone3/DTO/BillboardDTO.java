@@ -40,9 +40,4 @@ public class BillboardDTO {
     @NotNull(message = "base price per week cannot be null")
     private Double basePricePerWeek;
 
-    @NotNull(message = "rating average cannot be null")
-    private Double ratingAvg;
-
-    @NotNull(message = "rating count cannot be null")
-    private Integer ratingCount;
 }
