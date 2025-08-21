@@ -14,7 +14,7 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
 
-    @PostMapping("/card")
+    @PostMapping("/pay")
     public ResponseEntity<?> processPayment(@RequestBody InvoiceDTO invoiceDTO){
         return ResponseEntity.status(200).body(invoiceService.processPayment(invoiceDTO));
     }
@@ -22,5 +22,14 @@ public class InvoiceController {
     @GetMapping("/get_status/{id}")
     public ResponseEntity<?> getPaymentStatus(@PathVariable String id){
         return ResponseEntity.status(HttpStatus.OK).body(invoiceService.getPaymentStatus(id));
+    }
+
+    @GetMapping("/callback")
+    public ResponseEntity<String> handlePaymentCallback(@RequestParam String id,
+                                                        @RequestParam String status,
+                                                        @RequestParam String amount,
+                                                        @RequestParam String message) {
+        invoiceService.handlePaymentCallback(id, status, amount, message);
+        return ResponseEntity.ok("Callback received");
     }
 }

@@ -27,6 +27,9 @@ public class BookingService {
     private final BillboardRepository billboardRepository;
     private final CampaignRepository campaignRepository;
     private final LessorRepository lessorRepository;
+
+    private final WhatsAppService whatsAppService;
+
     public List<Booking> getAllBooking(){
         return bookingRepository.findAll();
     }
@@ -49,6 +52,8 @@ public class BookingService {
         booking.setEndDate(bookingDTO.getEndDate());
         booking.setPriceTotal(calculateTotalPricePerWeek(booking,billboard));
         bookingRepository.save(booking);
+
+
     }
 
     public void updateBooking(Integer id , BookingDTO booking){
