@@ -1,6 +1,8 @@
 package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.apache.catalina.connector.Response;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.DTO.CampaignDTO;
 import org.example.capstone3.Model.Advertiser;
@@ -17,6 +19,9 @@ public class CampaignService {
 
     private final CampaignRepository campaignRepository;
     private final AdvertiserRepository advertiserRepository;
+
+
+
     public List<Campaign> getAllCampaign(){
         return campaignRepository.findAll();
     }
@@ -48,6 +53,7 @@ public class CampaignService {
         }
         campaignRepository.delete(campaign);
     }
+
 
 
 }

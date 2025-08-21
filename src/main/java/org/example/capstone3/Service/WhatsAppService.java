@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class WhatsAppService {
 
-    @Value("${ultramsg.base-url:https://api.ultramsg.com}")
+    @Value("${ultramsg.base-url}")
     private String baseUrl;
 
     @Value("${ultramsg.instance-id}")
