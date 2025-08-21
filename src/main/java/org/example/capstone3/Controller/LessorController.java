@@ -26,15 +26,21 @@ public class LessorController {
         return ResponseEntity.status(200).body(new ApiResponse("Lessor added successfully"));
     }
 
+    @PostMapping("/request-otp/{id}/{actionType}")
+    public ResponseEntity<?> requestLessorOtp(@PathVariable Integer id, @PathVariable String actionType) {
+        lessorService.requestOtpForLessorAction(id, actionType);
+        return ResponseEntity.status(200).body(new ApiResponse("OTP requested successfully"));
+    }
+
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateLessor(@PathVariable Integer id, @RequestBody @Valid Lessor lessor){
-        lessorService.updateLessor(id, lessor);
+    public ResponseEntity<?> updateLessor(@PathVariable Integer id, @RequestBody @Valid Lessor lessor, @RequestParam String otp){
+        lessorService.updateLessor(id, lessor, otp);
         return ResponseEntity.status(200).body(new ApiResponse("Lessor updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteLessor(@PathVariable Integer id){
-        lessorService.deleteLessor(id);
+    public ResponseEntity<?> deleteLessor(@PathVariable Integer id, @RequestParam String otp){
+        lessorService.deleteLessor(id, otp);
         return ResponseEntity.status(200).body(new ApiResponse("Lessor deleted successfully"));
     }
 

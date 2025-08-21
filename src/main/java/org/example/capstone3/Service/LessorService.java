@@ -6,6 +6,7 @@ import org.example.capstone3.Model.Billboard;
 import org.example.capstone3.Model.Booking;
 import org.example.capstone3.Model.Invoice;
 import org.example.capstone3.Model.Lessor;
+import org.example.capstone3.Model.Mail;
 import org.example.capstone3.Repository.BillboardRepository;
 import org.example.capstone3.Repository.BookingRepository;
 import org.example.capstone3.Repository.InvoiceRepository;
@@ -26,6 +27,8 @@ public class LessorService {
     private final BookingRepository bookingRepository;
     private final BillboardRepository billboardRepository;
     private final InvoiceRepository invoiceRepository;
+    private final OtpService otpService;
+    private final MailService mailService;
 
     private final WhatsAppService whatsAppService;
 
@@ -40,7 +43,34 @@ public class LessorService {
         lessorRepository.save(lessor);
     }
 
-    public void updateLessor(Integer id , Lessor lessor){
+    public void requestOtpForLessorAction(Integer id, String actionType) {
+        Lessor lessor = lessorRepository.findLessorById(id);
+        if (lessor == null) {
+            throw new ApiException("Lessor with id " + id + " not found");
+        }
+        if (lessor.getEmail() == null || lessor.getEmail().isEmpty()) {
+            throw new ApiException("Lessor email is not available to send OTP.");
+        }
+
+        String otp = otpService.generateOtp();
+        String otpKey = "LESSOR_" + id + "_" + actionType.toUpperCase();
+        otpService.storeOtp(otpKey, otp);
+
+        String subject = "OTP for Lessor " + actionType + " - Capstone3";
+        String body = "Your One-Time Password for " + actionType + " operation is: " + otp + ". This OTP is valid for a short period.";
+        Mail mail = new Mail();
+        mail.setTo(lessor.getEmail());
+        mail.setSubject(subject);
+        mail.setText(body);
+        mailService.sendWithoutAttachment(mail);
+    }
+
+    public void updateLessor(Integer id ,Lessor lessor, String otp){
+        String otpKey = "LESSOR_" + id + "_UPDATE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for update.");
+        }
+
         Lessor oldLessor = lessorRepository.findLessorById(id);
         if (oldLessor == null){
             throw new ApiException("Lessor with id " + id + " not found");
@@ -53,7 +83,12 @@ public class LessorService {
         lessorRepository.save(oldLessor);
     }
 
-    public void deleteLessor(Integer id){
+    public void deleteLessor(Integer id, String otp){
+        String otpKey = "LESSOR_" + id + "_DELETE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for delete.");
+        }
+
         Lessor lessor = lessorRepository.findLessorById(id);
         if (lessor == null){
             throw new ApiException("Lessor with id " + id + " not found");

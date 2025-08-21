@@ -7,6 +7,7 @@ import org.example.capstone3.Model.Billboard;
 import org.example.capstone3.Model.Booking;
 import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Model.Lessor;
+import org.example.capstone3.Model.Mail;
 import org.example.capstone3.Repository.BillboardRepository;
 import org.example.capstone3.Repository.BookingRepository;
 import org.example.capstone3.Repository.CampaignRepository;
@@ -32,6 +33,8 @@ public class BookingService {
     private final BillboardRepository billboardRepository;
     private final CampaignRepository campaignRepository;
     private final LessorRepository lessorRepository;
+    private final OtpService otpService;
+    private final MailService mailService;
 
     private final WhatsAppService whatsAppService;
 
@@ -70,19 +73,51 @@ public class BookingService {
         whatsAppService.sendText(lessor.getPhoneNumber(),"you have new pending booking to check");
     }
 
-    public void updateBooking(Integer id , BookingDTO booking){
+    public void requestOtpForBookingAction(Integer id, String actionType) {
+        Booking booking = bookingRepository.findBookingById(id);
+        if (booking == null) {
+            throw new ApiException("Booking with id " + id + " not found");
+        }
+        // Assuming OTP is sent to the advertiser who made the booking
+        if (booking.getCampaign() == null || booking.getCampaign().getAdvertiser() == null || booking.getCampaign().getAdvertiser().getEmail() == null || booking.getCampaign().getAdvertiser().getEmail().isEmpty()) {
+            throw new ApiException("Advertiser email for this booking is not available to send OTP.");
+        }
+
+        String otp = otpService.generateOtp();
+        String otpKey = "BOOKING_" + id + "_" + actionType.toUpperCase();
+        otpService.storeOtp(otpKey, otp);
+
+        String subject = "OTP for Booking " + actionType + " - Capstone3";
+        String body = "Your One-Time Password for " + actionType + " operation is: " + otp + ". This OTP is valid for a short period.";
+        Mail mail = new Mail();
+        mail.setTo(booking.getCampaign().getAdvertiser().getEmail());
+        mail.setSubject(subject);
+        mail.setText(body);
+        mailService.sendWithoutAttachment(mail);
+    }
+
+    public void updateBooking(Integer id , BookingDTO bookingDTO, String otp){
+        String otpKey = "BOOKING_" + id + "_UPDATE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for update.");
+        }
 
         Booking oldBooking = bookingRepository.findBookingById(id);
 
         if (oldBooking == null){
             throw new ApiException("Booking with id " + id + " not found");
         }
-        oldBooking.setStartDate(booking.getStartDate());
-        oldBooking.setEndDate(booking.getEndDate());
+        oldBooking.setStartDate(bookingDTO.getStartDate());
+        oldBooking.setEndDate(bookingDTO.getEndDate());
         bookingRepository.save(oldBooking);
     }
 
-    public void deleteBooking(Integer id){
+    public void deleteBooking(Integer id, String otp){
+        String otpKey = "BOOKING_" + id + "_DELETE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for delete.");
+        }
+
         Booking booking = bookingRepository.findBookingById(id);
         if (booking == null){
             throw new ApiException("Booking with id " + id + " not found");
@@ -101,7 +136,12 @@ public class BookingService {
     }
 
 
-    public void acceptBooking(Integer lessorId, Integer bookingId) {
+    public void acceptBooking(Integer lessorId, Integer bookingId, String otp) {
+        String otpKey = "BOOKING_" + bookingId + "_ACCEPT";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for accept booking.");
+        }
+
         Booking booking = bookingRepository.findByIdAndBillboard_Lessor_Id(bookingId, lessorId);
         Lessor lessor = lessorRepository.findLessorById(lessorId);
         if(lessor == null)
