@@ -31,7 +31,6 @@ public class Booking {
     private Billboard billboard;
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
     private Invoice invoices;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)

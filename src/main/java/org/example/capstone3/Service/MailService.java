@@ -43,4 +43,5 @@ public class MailService {
             throw new RuntimeException("Failed to send email", e);
         }
     }
+
 }

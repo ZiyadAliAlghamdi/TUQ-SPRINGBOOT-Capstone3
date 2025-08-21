@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Model.Advertiser;
 import org.example.capstone3.Model.Campaign;
+import org.example.capstone3.Model.Mail;
 import org.example.capstone3.Repository.AdvertiserRepository;
 import org.example.capstone3.Repository.CampaignRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,7 +77,11 @@ public class AdvertiserService {
 
         String subject = "OTP for Advertiser " + actionType + " - Capstone3";
         String body = "Your One-Time Password for " + actionType + " operation is: " + otp + ". This OTP is valid for a short period.";
-        mailService.sendEmail(advertiser.getEmail(), subject, body);
+        Mail mail = new Mail();
+        mail.setTo(advertiser.getEmail());
+        mail.setSubject(subject);
+        mail.setText(body);
+        mailService.sendWithoutAttachment(mail);
     }
 
     public void updateAdvertiser(Integer id , Advertiser advertiser, String otp){

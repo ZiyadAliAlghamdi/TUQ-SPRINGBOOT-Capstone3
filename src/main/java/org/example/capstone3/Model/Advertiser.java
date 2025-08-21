@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -26,8 +27,9 @@ public class Advertiser {
     @Column(columnDefinition = "varchar(20) not null")
     private String companyName;
 
-    @Column(columnDefinition = "boolean")
-    private boolean isSubscribed=false;
+
+
+
     @NotEmpty(message = "brand name cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String brandName;
@@ -39,9 +41,19 @@ public class Advertiser {
     @NotEmpty(message = "Advertiser crNationalNumber is required!")
     private String crNationalNumber;
 
+    //subscription variables
+    @Column(columnDefinition = "boolean")
+    private boolean isSubscribed=false;
+    private Boolean autoRenewEnabled;
+    private LocalDate nextChargeDate;
+    private String savedCardToken;
+
     @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
     private Set<Campaign> campaigns;
 
     @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
     private Set<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
+    private Set<Invoice> invoices;
 }
