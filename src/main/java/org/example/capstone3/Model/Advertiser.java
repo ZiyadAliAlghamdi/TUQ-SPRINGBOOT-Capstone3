@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Setter

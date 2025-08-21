@@ -36,7 +36,7 @@ public class AdvertiserService {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(wathqApiKey);
+        headers.add("apiKey" , wathqApiKey);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<Void> req = new HttpEntity<>(headers);
 
@@ -47,7 +47,7 @@ public class AdvertiserService {
         JsonNode root = mapper.readTree(res.getBody());
 
         String status = root.path("status").path("name").asText();
-        if (!"Active".equalsIgnoreCase(status)) {
+        if (!"نشط".equalsIgnoreCase(status)) {
             throw new ApiException("Commercial registration is not Active: " + status);
         }
 

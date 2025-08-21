@@ -1,8 +1,8 @@
 package org.example.capstone3.Advice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Api.ApiResponse;
-
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +11,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
-
-
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.SQLSyntaxErrorException;
 
 @ControllerAdvice
 public class ControllerAdvise {
@@ -26,7 +22,7 @@ public class ControllerAdvise {
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<?> ApiException(ApiException e){
         String message = e.getMessage();
-        return ResponseEntity.status(400).body(message);
+        return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 
     //handles Jakarta Validation exceptions
@@ -76,6 +72,14 @@ public class ControllerAdvise {
         String message = dataIntegrityViolationException.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
+
+
+    @ExceptionHandler(value = JsonProcessingException.class)
+    public ResponseEntity<?> JsonProcessingException(JsonProcessingException jsonProcessingException){
+        String message = jsonProcessingException.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(message));
+    }
+
 
 
 }
