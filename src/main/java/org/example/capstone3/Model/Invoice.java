@@ -16,13 +16,17 @@ import java.time.LocalDate;
 @Entity
 public class Invoice {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne
-    @MapsId
     @JsonIgnore
     private Booking booking;
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "advertiser_id", referencedColumnName = "id")
+    private Advertiser advertiser;
 
     @NotEmpty(message = "cardName cannot be empty")
     @Column(nullable = false)
@@ -63,6 +67,10 @@ public class Invoice {
     @NotEmpty(message = "status cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String status;  //todo from moyaser
+
+
+    @Column(columnDefinition = "varchar(50)")
+    private String kind;
 
     @Column(unique = true)
     private String paymentId;

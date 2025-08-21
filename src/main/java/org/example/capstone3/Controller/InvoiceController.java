@@ -1,5 +1,6 @@
 package org.example.capstone3.Controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
 import org.example.capstone3.DTO.InvoiceDTO;
@@ -27,8 +28,13 @@ public class InvoiceController {
     }
 
     @PostMapping("/pay/{bookingId}")
-    public ResponseEntity<?> processPayment(@PathVariable Integer bookingId,@RequestBody InvoiceDTO invoiceDTO){
+    public ResponseEntity<?> processPaymentBooking(@PathVariable Integer bookingId,@RequestBody InvoiceDTO invoiceDTO){
         return ResponseEntity.status(200).body(invoiceService.processPayment(bookingId,invoiceDTO));
+    }
+
+    @PostMapping("/pay/subscription/{advertiserId}")
+    public ResponseEntity<?> processPaymentSubscription(@PathVariable Integer advertiserId,@Valid @RequestBody InvoiceDTO invoiceDTO){
+        return ResponseEntity.status(200).body(invoiceService.processPaymentForSubscription(advertiserId,invoiceDTO));
     }
 
 
