@@ -28,9 +28,7 @@ public class BillboardService {
         Billboard billboard = new Billboard();
         billboard.setLessor(lessor);
         billboard.setTitle(billboardDTO.getTitle());
-        billboard.setAddress(billboardDTO.getAddress());
-        billboard.setLat(billboardDTO.getLat());
-        billboard.setLng(billboardDTO.getLng());
+        billboard.setDistrict(billboardDTO.getDistrict());
         billboard.setType(billboardDTO.getType());
         billboard.setWidth(billboardDTO.getWidth());
         billboard.setHeight(billboardDTO.getHeight());
@@ -50,9 +48,7 @@ public class BillboardService {
         }
         oldBillboard.setLessor(lessor);
         oldBillboard.setTitle(billboardDTO.getTitle());
-        oldBillboard.setAddress(billboardDTO.getAddress());
-        oldBillboard.setLat(billboardDTO.getLat());
-        oldBillboard.setLng(billboardDTO.getLng());
+        oldBillboard.setDistrict(billboardDTO.getDistrict());
         oldBillboard.setType(billboardDTO.getType());
         oldBillboard.setWidth(billboardDTO.getWidth());
         oldBillboard.setHeight(billboardDTO.getHeight());
@@ -61,11 +57,44 @@ public class BillboardService {
         billboardRepository.save(oldBillboard);
     }
 
-    public void deleteBillboard(Integer id){
+    public void deleteBillboard(Integer lessor_id,Integer id){
+        Lessor lessor = lessorRepository.findLessorById(lessor_id);
+        if(lessor == null)
+            throw new ApiException("Lessor not found");
+
         Billboard billboard = billboardRepository.findBillboardById(id);
         if (billboard == null){
             throw new ApiException("Billboard with id " + id + " not found");
         }
+        if(!billboard.getLessor().equals(lessor))
+            throw new ApiException("Billboard Is Not For given Lessor");
+
         billboardRepository.delete(billboard);
     }
+
+
+    //EXTRA:
+
+    public List<Billboard>  findBillboardsByDistrict(String district){
+        return billboardRepository.findBillboardsByDistrict(district);
+    }
+
+
+    public List<Billboard> findBillboardsByHeightAndWidth(Double height,Double width){
+        return billboardRepository.findBillboardsByHeightAndWidth(height,width);
+    }
+
+    public List<Billboard> findBillboardsByLessor_RatingAvg(){
+    return billboardRepository.findAllByOrderByLessor_RatingAvgDesc();
+    }
+
+    public List<Billboard> findBillboardsByAvailabilityStatus(String availabilityStatus){
+        return billboardRepository.findBillboardsByAvailabilityStatus(availabilityStatus);
+    }
+
+
+
+
+
+
 }

@@ -7,10 +7,7 @@ import org.example.capstone3.Model.Advertiser;
 import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Repository.AdvertiserRepository;
 import org.example.capstone3.Repository.CampaignRepository;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +29,8 @@ public class CampaignService {
     public void addCampaign(CampaignDTO campaignDTO){
         Advertiser advertiser = advertiserRepository.findAdvertiserById(campaignDTO.getAdvertiser_id());
         if(advertiser == null)
-            throw new ApiException("Advertiser Not Found");
+            throw new ApiException("Advertiser Not Found/Not Licensed");
+
         Campaign campaign = new Campaign();
         campaign.setAdvertiser(advertiser);
         campaign.setDistrict(campaignDTO.getDistrict());
@@ -68,7 +66,7 @@ public class CampaignService {
         Campaign c = campaignRepository.findCampaignById(id);
         if (c == null) throw new ApiException("Campaign with id " + id + " not found");
         if(!c.getAdvertiser().isSubscribed()){
-            throw new ApiException("AdviserNot Subscribed");
+            throw new ApiException("Advertiser Not Subscribed");
         }
 
         String prompt = """
@@ -96,6 +94,34 @@ public class CampaignService {
 
         return ai.call(prompt);
     }
+
+    public String predictPerformance(Integer campaignId) {
+        Campaign c = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new ApiException("Campaign not found"));
+        if (!c.getAdvertiser().isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت محلل بيانات تسويقية متخصص في الحملات الإعلانية الخارجية في السعودية.
+
+    اسم الحملة: %s
+    الهدف: %s
+    الحي المستهدف: %s
+
+    المطلوب:
+    - اكتب بالعربية الفصحى وبنقاط واضحة.
+    - لا مقدمات ولا Markdown.
+    - اذكر:
+      - 3 توقعات حول الأداء المتوقع للحملة.
+      - 3 فرص يمكن استغلالها.
+      - 3 تحديات محتملة.
+    """.formatted(c.getName(), c.getObjective(), c.getDistrict());
+
+        return ai.call(prompt);
+    }
+
+
+
+
 
 
 

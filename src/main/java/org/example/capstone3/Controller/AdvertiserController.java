@@ -50,4 +50,36 @@ public class AdvertiserController {
     public ResponseEntity<?> getAdvertiserCampaigns(@PathVariable Integer id){
         return ResponseEntity.status(200).body(advertiserService.getAdvertiserCampaign(id));
     }
+
+    @GetMapping("/competitor-analysis/{id}")
+    public ResponseEntity<?> competitorAnalysis(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(advertiserService.competitorAnalysis(id));
+    }
+    @GetMapping("/suggest-campaign-ideas/{id}")
+    public ResponseEntity<?> suggestCampaignIdeas(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(advertiserService.suggestCampaignIdeas(id));
+    }
+    @GetMapping("/summarize-feedback/{id}")
+    public ResponseEntity<?> summarizeFeedback(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(advertiserService.summarizeFeedback(id));
+    }
+    @GetMapping("/monthly-strategy/{id}")
+    public ResponseEntity<?> monthlyStrategy(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(advertiserService.monthlyStrategy(id));
+    }
+    @GetMapping("/compliance-check/{id}")
+    public ResponseEntity<?> complianceCheck(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(advertiserService.complianceCheck(id));
+    }
+
+    @GetMapping("/advise-billboard-type/{advertiserId}")
+    public ResponseEntity<?> adviseBillboardType(@PathVariable Integer advertiserId) {
+        return ResponseEntity.ok(advertiserService.adviseBillboardType(advertiserId));
+    }
+
+    @GetMapping("/audience-demographics-analysis/{advertiserId}")
+    public ResponseEntity<?> audienceDemographicsAnalysis(@PathVariable Integer advertiserId) {
+        return ResponseEntity.ok(advertiserService.audienceDemographicsAnalysis(advertiserId));
+    }
+
 }

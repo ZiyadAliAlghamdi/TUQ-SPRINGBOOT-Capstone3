@@ -11,6 +11,7 @@ import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Model.Mail;
 import org.example.capstone3.Repository.AdvertiserRepository;
 import org.example.capstone3.Repository.CampaignRepository;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class AdvertiserService {
     private final CampaignRepository campaignRepository;
     private final OtpService otpService;
     private final MailService mailService;
-
+    private final OpenAiChatModel ai;
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
@@ -122,5 +123,177 @@ public class AdvertiserService {
         }
 
         return campaignRepository.findCampaignByAdvertiser(advertiser);
+    }
+
+    //Helper methods
+
+    public String competitorAnalysis(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت محلل تسويق متخصص في السوق السعودي للوحات الإعلانية.
+
+    اسم الشركة: %s
+    اسم العلامة التجارية: %s
+
+    التزم بالتالي:
+    - اكتب بالعربية الفصحى.
+    - أجب فقط بنقاط تبدأ بعلامة "- ".
+    - لا تستخدم Markdown أو مقدمات.
+    - اذكر: 
+      - نقاط قوة العلامة التجارية (3 نقاط).
+      - نقاط ضعف محتملة (3 نقاط).
+      - توصيات لمواجهة المنافسة (4 نقاط).
+    """.formatted(adv.getCompanyName(), adv.getBrandName());
+
+        return ai.call(prompt);
+    }
+    public String suggestCampaignIdeas(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String districts = adv.getCampaigns().stream()
+                .map(Campaign::getDistrict)
+                .distinct()
+                .reduce("", (a, b) -> a + ", " + b);
+
+        String prompt = """
+    أنت خبير إعلانات خارجية في السعودية.
+
+    العلامة التجارية: %s
+    الأحياء المستهدفة: %s
+
+    المطلوب:
+    - اكتب بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - قدم 5 أفكار إعلانية مبتكرة للوحات في تلك الأحياء (كل فكرة نقطة جديدة).
+    """.formatted(adv.getBrandName(), districts);
+
+        return ai.call(prompt);
+    }
+    public String summarizeFeedback(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        StringBuilder feedbackBuilder = new StringBuilder();
+        adv.getFeedbacks().forEach(f -> feedbackBuilder
+                .append("التصنيف: ").append(f.getType())
+                .append(" | التقييم: ").append(f.getScore())
+                .append(" | التعليق: ").append(f.getComment())
+                .append("\n"));
+
+        String prompt = """
+    أنت محلل آراء العملاء.
+
+    بيانات التعليقات:
+    %s
+
+    التزم بالتالي:
+    - اكتب نقاط موجزة بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - قدم:
+      - أبرز 3 نقاط إيجابية (استنادًا إلى التعليقات والتقييمات).
+      - أبرز 3 ملاحظات سلبية.
+      - 3 توصيات عملية لتحسين الحملات.
+    """.formatted(feedbackBuilder.toString());
+
+        return ai.call(prompt);
+    }
+
+    public String monthlyStrategy(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت خبير استراتيجيات إعلانات.
+
+    الشركة: %s
+    العلامة التجارية: %s
+
+    المطلوب:
+    - بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - خطّة إعلانية شهرية مقسّمة:
+      - الأسبوع 1 (نقطتان).
+      - الأسبوع 2 (نقطتان).
+      - الأسبوع 3 (نقطتان).
+      - الأسبوع 4 (نقطتان).
+    """.formatted(adv.getCompanyName(), adv.getBrandName());
+
+        return ai.call(prompt);
+    }
+
+
+    public String complianceCheck(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت مستشار قانوني في مجال الإعلانات الخارجية في السعودية.
+
+    الشركة: %s
+    العلامة التجارية: %s
+
+    المطلوب:
+    - اكتب نقاط بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - اذكر:
+      - 3 مخاطر محتملة تتعلق بالامتثال.
+      - 3 توصيات لتجنّبها.
+    """.formatted(adv.getCompanyName(), adv.getBrandName());
+
+        return ai.call(prompt);
+    }
+
+    public String adviseBillboardType(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت خبير إعلانات خارجية متخصص في اختيار أنواع اللوحات الإعلانية في السعودية.
+
+    الشركة: %s
+    العلامة التجارية: %s
+
+    المطلوب:
+    - اكتب نقاط بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - قدم:
+      - 3 أنواع لوحات إعلانية مناسبة لأهداف المعلن.
+      - المميزات الأساسية لكل نوع.
+      - متى يُفضَّل استخدام كل نوع.
+    """.formatted(adv.getCompanyName(), adv.getBrandName());
+
+        return ai.call(prompt);
+    }
+
+    public String audienceDemographicsAnalysis(Integer advertiserId) {
+        Advertiser adv = advertiserRepository.findById(advertiserId)
+                .orElseThrow(() -> new ApiException("Advertiser not found"));
+        if (!adv.isSubscribed()) throw new ApiException("Advertiser Not Subscribed");
+
+        String prompt = """
+    أنت محلل تسويق متخصص في الجمهور المستهدف للإعلانات الخارجية في السعودية.
+
+    الشركة: %s
+    العلامة التجارية: %s
+
+    المطلوب:
+    - اكتب نقاط بالعربية الفصحى.
+    - لا مقدمات ولا Markdown.
+    - اذكر:
+      - 3 فئات عمرية أو شرائح ديموغرافية مناسبة للحملة.
+      - 3 أنماط سلوك استهلاكي لهذه الشرائح.
+      - 3 توصيات عملية للوصول بشكل أفضل إلى هذه الفئات.
+    """.formatted(adv.getCompanyName(), adv.getBrandName());
+
+        return ai.call(prompt);
     }
 }
