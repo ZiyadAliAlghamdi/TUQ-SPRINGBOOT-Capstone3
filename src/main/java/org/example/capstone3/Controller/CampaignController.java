@@ -43,4 +43,19 @@ public class CampaignController {
     public ResponseEntity<?> adviseCampaign(@PathVariable Integer id){
         return ResponseEntity.status(200).body(campaignService.adviseCampaign(id));
     }
+
+    @GetMapping("/predict-performance/{id}")
+    public ResponseEntity<?> predictPerformance(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(campaignService.predictPerformance(id));
+    }
+
+
+
+
+
+
+
+
+
 }
+

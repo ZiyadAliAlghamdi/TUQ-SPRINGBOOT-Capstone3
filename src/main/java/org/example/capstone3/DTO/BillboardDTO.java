@@ -16,14 +16,8 @@ public class BillboardDTO {
     @NotEmpty(message = "title cannot be empty")
     private String title;
 
-    @NotEmpty(message = "address cannot be empty")
-    private String address;
-
-    @NotNull(message = "latitude cannot be null")
-    private Double lat;
-
-    @NotNull(message = "longitude cannot be null")
-    private Double lng;
+    @NotEmpty(message = "Billboard District is required!")
+    private String district;
 
     @NotEmpty(message = "type cannot be empty")
     private String type;

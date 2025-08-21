@@ -2,8 +2,7 @@ package org.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 
 import java.util.Set;
@@ -30,13 +29,7 @@ public class Billboard {
     private String title;
 
     @Column(columnDefinition = "varchar(100) not null")
-    private String address;
-
-    @Column(columnDefinition = "decimal(9,6) not null")
-    private Double lat;
-
-    @Column(columnDefinition = "decimal(9,6) not null")
-    private Double lng;
+    private String district;
 
     @Column(columnDefinition = "varchar(20) not null")
     private String type;

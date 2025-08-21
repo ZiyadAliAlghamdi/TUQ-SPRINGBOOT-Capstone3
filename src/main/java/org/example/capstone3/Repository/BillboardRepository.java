@@ -13,4 +13,14 @@ public interface BillboardRepository extends JpaRepository<Billboard, Integer> {
 
     @Query("select b from Billboard b where b.lessor.id = ?1")
     List<Billboard> findBillboardByLessor(Integer id);
+
+
+    @Query("select b from Billboard b where b.district=?1")
+    List<Billboard> findBillboardsByDistrict(String district);
+
+    List<Billboard> findBillboardsByHeightAndWidth(Double height, Double width);
+
+    List<Billboard> findAllByOrderByLessor_RatingAvgDesc();
+
+    List<Billboard> findBillboardsByAvailabilityStatus(String availabilityStatus);
 }

@@ -1,6 +1,5 @@
 package org.example.capstone3.Controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
 import org.example.capstone3.Model.CampaignAsset;
@@ -33,12 +32,6 @@ public class CampaignAssetController {
     ) throws IOException {
         campaignAssetService.addCampaignAsset(campaign_id, file);
         return ResponseEntity.status(200).body(new ApiResponse("Campaign Asset added successfully"));
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateCampaignAsset(@PathVariable Integer id, @RequestBody @Valid CampaignAsset campaignAsset){
-        campaignAssetService.updateCampaignAsset(id, campaignAsset);
-        return ResponseEntity.status(200).body(new ApiResponse("Campaign Asset updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
