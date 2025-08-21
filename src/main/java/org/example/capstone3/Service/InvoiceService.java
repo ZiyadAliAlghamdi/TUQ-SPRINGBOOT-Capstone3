@@ -71,7 +71,7 @@ public class InvoiceService {
             throw new ApiException("cannot continue payment, booking status: "+booking.getStatus());
         }
 
-        String callbackUrl = "http://localhost:8080/api/v1/payments/callback";
+        String callbackUrl = "http://localhost:8080/api/v1/invoice/callback";
 
 
         //create the body
