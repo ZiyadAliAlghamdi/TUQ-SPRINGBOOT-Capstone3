@@ -14,7 +14,8 @@ public class MailService {
 
     private final JavaMailSender mailSender;
 
-    public void sendWithAttachment(String to,
+    public void sendWithAttachment(String from,
+                                   String to,
                                    String subject,
                                    String htmlBody,
                                    byte[] attachment,
@@ -22,6 +23,7 @@ public class MailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(from);
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlBody, true);

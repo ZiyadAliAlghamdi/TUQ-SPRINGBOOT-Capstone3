@@ -20,6 +20,8 @@ public class LessorService {
     }
 
     public void addLessor(Lessor lessor){
+        lessor.setRentCount(0);
+        lessor.setRatingAvg(0.0);
         lessorRepository.save(lessor);
     }
 

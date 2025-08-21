@@ -50,7 +50,7 @@ public class Booking {
     @Column(columnDefinition = "decimal(10,2) not null")
     private Double priceTotal;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(50) not null")
     private String status;  //todo : status(lessor_pending, payment_pending, approved, canceled)
 
     @CreationTimestamp
