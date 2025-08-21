@@ -12,12 +12,15 @@ import org.example.capstone3.Repository.InvoiceRepository;
 import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LessorService {
+
 
     private final LessorRepository lessorRepository;
     private final BookingRepository bookingRepository;
@@ -81,7 +84,7 @@ public class LessorService {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void remindPendingBooking(){
-        List<Lessor> lessors = lessorRepository.findAll();
+        List<Lessor> lessors =lessorRepository.findAll();
         for (Lessor lessor : lessors) {
             List<Booking> pendingBookings = bookingRepository.findByStatusAndBillboard_Lessor_Id("lessor_pending",lessor.getId());
             int pendingBookingsCount = pendingBookings.size();

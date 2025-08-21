@@ -12,6 +12,9 @@ import org.example.capstone3.Repository.BookingRepository;
 import org.example.capstone3.Repository.CampaignRepository;
 import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -22,6 +25,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class BookingService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
     private final BookingRepository bookingRepository;
     private final BillboardRepository billboardRepository;
@@ -142,8 +147,19 @@ public class BookingService {
     }
 
 
+    @Scheduled(cron = "0 0 * * * ?")
+    public void updateBookingStatusBasedOnEndDate() {
+        List<Booking> bookings = bookingRepository.findAll();
+        LocalDate today = LocalDate.now();
 
-
-
-
+        for (Booking booking : bookings) {
+            if (booking.getEndDate() != null && booking.getEndDate().isBefore(today)) {
+                if (!"completed".equals(booking.getStatus()) && !"cancelled".equals(booking.getStatus())) {
+                    booking.setStatus("completed");
+                    bookingRepository.save(booking);
+                    logger.info("Booking {} status updated to completed.", booking.getId());
+                }
+            }
+        }
+    }
 }
