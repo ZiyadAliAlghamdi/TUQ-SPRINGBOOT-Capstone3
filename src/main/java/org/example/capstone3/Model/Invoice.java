@@ -63,4 +63,7 @@ public class Invoice {
     @NotEmpty(message = "status cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String status;  //todo from moyaser
+
+    @Column(unique = true)
+    private String paymentId;
 }

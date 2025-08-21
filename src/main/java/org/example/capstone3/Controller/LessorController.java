@@ -37,4 +37,15 @@ public class LessorController {
         lessorService.deleteLessor(id);
         return ResponseEntity.status(200).body(new ApiResponse("Lessor deleted successfully"));
     }
+
+    @GetMapping("/get/pending")
+    public ResponseEntity<?> getLessorPendingBookings(){
+        return ResponseEntity.ok(lessorService.getPendingBookings());
+    }
+
+    @PostMapping("/remind-pending")
+    public ResponseEntity<?> remindPendingBookings(){
+        lessorService.remindPendingBooking();
+        return ResponseEntity.ok(new ApiResponse("Reminders sent successfully"));
+    }
 }

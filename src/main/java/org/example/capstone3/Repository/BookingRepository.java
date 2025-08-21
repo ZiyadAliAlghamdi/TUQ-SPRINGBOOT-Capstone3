@@ -16,5 +16,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     Booking findByIdAndBillboard_Lessor_Id(Integer bookingId, Integer lessorId);
 
+    @Query("select b from Booking  b where b.status ='lessor_pending'")
+    List<Booking> findLessorPendingBookings();
+
 
 }
