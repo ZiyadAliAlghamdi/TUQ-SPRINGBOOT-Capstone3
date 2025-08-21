@@ -1,7 +1,6 @@
 package org.example.capstone3.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.DTO.InvoiceDTO;
@@ -105,7 +104,6 @@ public class InvoiceService {
                 JsonNode.class);
 
         // Parse JSON response
-        ObjectMapper mapper = new ObjectMapper();
         JsonNode root = response.getBody();
         String status = root.path("status").asText();          // e.g. "paid", "failed", "initiated"
         String paymentId = root.path("id").asText(null);
@@ -131,6 +129,7 @@ public class InvoiceService {
 
 
         Advertiser adv = booking.getCampaign().getAdvertiser();
+        String from = booking.getBillboard().getLessor().getEmail();
         String to = adv.getEmail();
 
 
@@ -155,14 +154,17 @@ public class InvoiceService {
           <li><b>Status:</b> %s</li>
           <li><b>Payment ID:</b> %s</li>
         </ul>
+        <p>please continue your payment process here: <a href=\"%s\">%s</a></p>
         <p>The receipt PDF is attached.</p>
         """.formatted(adv.getCompanyName(),
                 booking.getId(),
                 inv.getAmount(), inv.getCurrency(),
                 inv.getStatus(),
-                paymentId == null ? "-" : paymentId);
+                paymentId == null ? "-" : paymentId,
+                root.path("source").path("transaction_url").asText(null),
+                root.path("source").path("transaction_url").asText(null));
 
-        mailService.sendWithAttachment(
+        mailService.sendWithAttachment(from,
                 to,
                 subject,
                 body,

@@ -2,6 +2,8 @@ package org.example.capstone3.Advice;
 
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Api.ApiResponse;
+
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.PlaceholderResolutionException;
@@ -9,10 +11,14 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
+
+
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLSyntaxErrorException;
 
 @ControllerAdvice
 public class ControllerAdvise {
@@ -70,5 +76,6 @@ public class ControllerAdvise {
         String message = dataIntegrityViolationException.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
+
 
 }
