@@ -24,7 +24,6 @@ public class Invoice {
     private Booking booking;
 
 
-    //todo:invoice InDto
     @NotEmpty(message = "cardName cannot be empty")
     @Column(nullable = false)
     private String cardName;
