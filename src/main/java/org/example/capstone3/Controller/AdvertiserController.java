@@ -1,5 +1,6 @@
 package org.example.capstone3.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
@@ -21,7 +22,7 @@ public class AdvertiserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addAdvertiser(@RequestBody @Valid Advertiser advertiser){
+    public ResponseEntity<?> addAdvertiser(@RequestBody @Valid Advertiser advertiser) throws JsonProcessingException {
         advertiserService.addAdvertiser(advertiser);
         return ResponseEntity.status(200).body(new ApiResponse("Advertiser added successfully"));
     }

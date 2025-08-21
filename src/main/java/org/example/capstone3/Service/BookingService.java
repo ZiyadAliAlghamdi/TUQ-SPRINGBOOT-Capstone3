@@ -37,10 +37,7 @@ public class BookingService {
         Campaign campaign  = campaignRepository.findCampaignById(bookingDTO.getCampaign_id());
         if(billboard == null || campaign ==null)
             throw new ApiException("Billboard/campaign not found");
-        LocalDate dateNow = LocalDate.now();
 
-        if(!campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
-            throw new ApiException("Verification Expired!");
 
 
 
@@ -119,7 +116,7 @@ public class BookingService {
             throw new ApiException("endDate must be on or after startDate");
         }
 
-        Double weeklyPrice = Objects.requireNonNull(billboard.getBasePricePerWeek(), "basePricePerWeek is required");
+        double weeklyPrice = Objects.requireNonNull(billboard.getBasePricePerWeek(), "basePricePerWeek is required");
         if (weeklyPrice <= 0) {
             throw new ApiException("basePricePerWeek must be > 0");
         }

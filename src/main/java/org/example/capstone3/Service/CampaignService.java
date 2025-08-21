@@ -48,4 +48,6 @@ public class CampaignService {
         }
         campaignRepository.delete(campaign);
     }
+
+
 }

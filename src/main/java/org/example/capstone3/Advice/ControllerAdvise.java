@@ -1,5 +1,6 @@
 package org.example.capstone3.Advice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Api.ApiResponse;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -68,6 +69,12 @@ public class ControllerAdvise {
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ResponseEntity<?> DataIntegrityViolationException( DataIntegrityViolationException dataIntegrityViolationException){
         String message = dataIntegrityViolationException.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(message));
+    }
+
+    @ExceptionHandler(value = JsonProcessingException.class)
+    public ResponseEntity<?> JsonProcessingException(JsonProcessingException jsonProcessingException){
+        String message = jsonProcessingException.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 

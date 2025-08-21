@@ -22,7 +22,6 @@ public class Campaign {
 
 
     @OneToMany(mappedBy = "campaign")
-
     private Set<Booking> bookings;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
