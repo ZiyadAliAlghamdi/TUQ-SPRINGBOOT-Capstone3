@@ -27,6 +27,9 @@ public class BookingService {
     private final BillboardRepository billboardRepository;
     private final CampaignRepository campaignRepository;
     private final LessorRepository lessorRepository;
+
+    private final WhatsAppService whatsAppService;
+
     public List<Booking> getAllBooking(){
         return bookingRepository.findAll();
     }
@@ -39,8 +42,7 @@ public class BookingService {
             throw new ApiException("Billboard/campaign not found");
         LocalDate dateNow = LocalDate.now();
 
-        if(!campaign.getAdvertiser().getExpiryDate().isAfter(dateNow))
-            throw new ApiException("Verification Expired!");
+
 
 
 
@@ -52,6 +54,8 @@ public class BookingService {
         booking.setEndDate(bookingDTO.getEndDate());
         booking.setPriceTotal(calculateTotalPricePerWeek(booking,billboard));
         bookingRepository.save(booking);
+
+
     }
 
     public void updateBooking(Integer id , BookingDTO booking){

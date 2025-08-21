@@ -71,7 +71,7 @@ public class InvoiceService {
             throw new ApiException("cannot continue payment, booking status: "+booking.getStatus());
         }
 
-        String callbackUrl = "https://moyasar.com/thanks";
+        String callbackUrl = "http://localhost:8080/api/v1/payments/callback";
 
 
         //create the body
@@ -123,6 +123,7 @@ public class InvoiceService {
         inv.setCurrency("SAR");
         inv.setDueDate(LocalDate.now());
         inv.setStatus(status);
+        inv.setPaymentId(paymentId);
 
         invoiceRepository.save(inv);
 
@@ -154,7 +155,7 @@ public class InvoiceService {
           <li><b>Status:</b> %s</li>
           <li><b>Payment ID:</b> %s</li>
         </ul>
-        <p>please continue your payment process here: <a href=\"%s\">%s</a></p>
+        <p>please continue your payment process here: <a href=\"%%s\">%%s</a></p>
         <p>The receipt PDF is attached.</p>
         """.formatted(adv.getCompanyName(),
                 booking.getId(),
@@ -177,4 +178,18 @@ public class InvoiceService {
 
 
 
+    public void handlePaymentCallback(String id, String status, String amount, String message) {
+        Invoice invoice = invoiceRepository.findInvoiceByPaymentId(id);
+        if (invoice == null) {
+            throw new ApiException("Invoice not found");
+        }
+
+        if (status.equalsIgnoreCase("paid")) {
+            Booking booking = invoice.getBooking();
+            booking.setStatus("approved");
+            bookingRepository.save(booking);
+            invoice.setStatus("paid");
+            invoiceRepository.save(invoice);
+        }
+    }
 }
