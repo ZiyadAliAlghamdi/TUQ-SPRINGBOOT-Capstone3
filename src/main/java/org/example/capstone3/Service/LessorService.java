@@ -37,9 +37,9 @@ public class LessorService {
         }
         oldLessor.setBusinessName(lessor.getBusinessName());
         oldLessor.setEmail(lessor.getEmail());
+        oldLessor.setPhoneNumber(lessor.getPhoneNumber());
         oldLessor.setOperatingRegions(lessor.getOperatingRegions());
         oldLessor.setContentRestrictions(lessor.getContentRestrictions());
-        oldLessor.setRatingAvg(lessor.getRatingAvg());
         lessorRepository.save(oldLessor);
     }
 

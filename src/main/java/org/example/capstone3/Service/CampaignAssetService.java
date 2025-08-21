@@ -49,7 +49,6 @@ public class CampaignAssetService {
         }
         oldCampaignAsset.setFileName(campaignAsset.getFileName());
         oldCampaignAsset.setFileContent(campaignAsset.getFileContent());
-        oldCampaignAsset.setCreatedAt(campaignAsset.getCreatedAt());
         campaignAssetRepository.save(oldCampaignAsset);
     }
 
