@@ -2,7 +2,8 @@ package org.example.capstone3.Advice;
 
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Api.ApiResponse;
-import org.hibernate.tool.schema.spi.CommandAcceptanceException;
+
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.PlaceholderResolutionException;
@@ -14,7 +15,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
-import java.net.http.HttpClient;
+
+
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLSyntaxErrorException;
 
@@ -75,27 +77,5 @@ public class ControllerAdvise {
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 
-    @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<?> NullPointerException(NullPointerException NullPointerException){
-        String message = NullPointerException.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(message));
-    }
 
-    @ExceptionHandler(SQLSyntaxErrorException.class)
-    public ResponseEntity<?> SQLSyntaxErrorException(SQLSyntaxErrorException SQLSyntaxErrorException){
-        String message = SQLSyntaxErrorException.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(message));
-    }
-
-    @ExceptionHandler(value = HttpClientErrorException.class)
-    public ResponseEntity<?> HttpClientErrorException(HttpClientErrorException HttpClientErrorException){
-        String message = HttpClientErrorException.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(message));
-    }
-
-    @ExceptionHandler(value = CommandAcceptanceException.class)
-    public ResponseEntity<?> CommandAcceptanceException(CommandAcceptanceException CommandAcceptanceException){
-        String message = CommandAcceptanceException.getMessage();
-        return ResponseEntity.status(400).body(new ApiResponse(message));
-    }
 }

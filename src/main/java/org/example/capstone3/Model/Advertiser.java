@@ -35,7 +35,8 @@ public class Advertiser {
     @Column(columnDefinition = "varchar(20) not null")
     private String paymentMethod;
 
-    private LocalDate expiryDate;
+    @NotEmpty(message = "Advertiser crNationalNumber is required!")
+    private String crNationalNumber;
 
     @OneToMany(mappedBy = "advertiser", cascade = CascadeType.ALL)
     private Set<Campaign> campaigns;
