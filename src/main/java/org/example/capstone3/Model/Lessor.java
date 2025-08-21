@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.Set;
@@ -27,6 +28,10 @@ public class Lessor {
     @Email(message = "please enter a valid email")
     @Column(columnDefinition = "varchar(255) not null unique")
     private String email;
+
+    @Pattern(regexp = "^\\+966\\d{9}$", message = "Phone number must be in the format +966XXXXXXXXX")
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @NotEmpty(message = "operating regions cannot be empty")
     @Column(columnDefinition = "varchar(255) not null")

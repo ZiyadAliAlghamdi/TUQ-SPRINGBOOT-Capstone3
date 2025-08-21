@@ -38,6 +38,13 @@ public class BookingService {
 
         Billboard billboard = billboardRepository.findBillboardById(bookingDTO.getBillboard_id());
         Campaign campaign  = campaignRepository.findCampaignById(bookingDTO.getCampaign_id());
+
+        Lessor lessor = lessorRepository.findLessorById(billboard.getLessor().getId());
+
+        if (lessor == null){
+            throw new ApiException("lessor not found");
+        }
+
         if(billboard == null || campaign ==null)
             throw new ApiException("Billboard/campaign not found");
 
@@ -54,6 +61,8 @@ public class BookingService {
         bookingRepository.save(booking);
 
 
+
+        whatsAppService.sendText(lessor.getPhoneNumber(),"you have new pending booking to check");
     }
 
     public void updateBooking(Integer id , BookingDTO booking){
@@ -131,6 +140,8 @@ public class BookingService {
 
         return weeksToBill * weeklyPrice;
     }
+
+
 
 
 
