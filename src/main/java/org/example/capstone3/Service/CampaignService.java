@@ -1,14 +1,16 @@
 package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import org.apache.catalina.connector.Response;
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.DTO.CampaignDTO;
 import org.example.capstone3.Model.Advertiser;
 import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Repository.AdvertiserRepository;
 import org.example.capstone3.Repository.CampaignRepository;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class CampaignService {
 
     private final CampaignRepository campaignRepository;
     private final AdvertiserRepository advertiserRepository;
+    private final OpenAiChatModel ai;
 
 
 
@@ -30,7 +33,13 @@ public class CampaignService {
         Advertiser advertiser = advertiserRepository.findAdvertiserById(campaignDTO.getAdvertiser_id());
         if(advertiser == null)
             throw new ApiException("Advertiser Not Found");
-        Campaign campaign = new Campaign(null,advertiser,null,null,campaignDTO.getName(),campaignDTO.getObjective(),campaignDTO.getLat(),campaignDTO.getLng(),null);
+        Campaign campaign = new Campaign();
+        campaign.setAdvertiser(advertiser);
+        campaign.setDistrict(campaignDTO.getDistrict());
+        campaign.setName(campaignDTO.getName());
+        campaign.setObjective(campaignDTO.getObjective());
+        campaign.setLat(campaignDTO.getLat());
+        campaign.setLng(campaignDTO.getLng());
         campaignRepository.save(campaign);
     }
 
@@ -53,6 +62,39 @@ public class CampaignService {
         }
         campaignRepository.delete(campaign);
     }
+
+
+    public String adviseCampaign(Integer id) {
+        Campaign c = campaignRepository.findCampaignById(id);
+        if (c == null) throw new ApiException("Campaign with id " + id + " not found");
+
+        String prompt = """
+    أنت مستشار حملات للوحات الإعلانية في السعودية.
+
+    اسم الحملة: %s
+    الهدف: %s
+    الحي المستهدف: %s
+
+    التزم بالتالي بدقة:
+    - اكتب بالعربية الفصحى وبنقاط واضحة فقط.
+    - لا تكتب أي مقدمة أو خاتمة أو عبارات تمهيدية مثل "بالطبع" أو "إليك".
+    - لا تستخدم تنسيقات Markdown (لا ### ولا **).
+    - لا تذكر هذه التعليمات أو دورك كمستشار.
+    - لكل نقطة ابدأ السطر بعلامة "- ".
+    - لا تذكر عدد النقاط, فقط اكتب النصيحة
+    - اكتب الأقسام التالية فقط وبالترتيب، مع العدد المحدد من النقاط لكل قسم:
+
+    عناوين مقترحة (3 نقاط):
+    النبرة (3 نقاط):
+    الأحياء/المواقع المستهدفة (3 نقاط — استنادًا إلى الحي المستهدف وما يشابهه منطقيًا):
+    التوزيع الأسبوعي (4 أسابيع — نقطة لكل أسبوع):
+    أخطاء شائعة لتجنّبها (4 نقاط):
+    """.formatted(c.getName(), c.getObjective(), c.getDistrict());
+
+        return ai.call(prompt);
+    }
+
+
 
 
 

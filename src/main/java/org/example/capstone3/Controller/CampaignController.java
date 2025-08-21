@@ -38,4 +38,9 @@ public class CampaignController {
         campaignService.deleteCampaign(id);
         return ResponseEntity.status(200).body(new ApiResponse("Campaign deleted successfully"));
     }
+
+    @GetMapping("/advise/{id}")
+    public ResponseEntity<?> adviseCampaign(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(campaignService.adviseCampaign(id));
+    }
 }

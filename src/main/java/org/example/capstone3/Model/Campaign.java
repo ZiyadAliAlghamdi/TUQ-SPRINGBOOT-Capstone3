@@ -34,7 +34,11 @@ public class Campaign {
     @Column(columnDefinition = "varchar(100) not null")
     private String objective;
 
+    @Column(columnDefinition = "varchar(100) not null")
+    private String district;
 
+    @Column(columnDefinition = "boolean")
+    private boolean isSubscribed=false;
     @Column(columnDefinition = "decimal(9,6) not null")
     private Double lat;
 
