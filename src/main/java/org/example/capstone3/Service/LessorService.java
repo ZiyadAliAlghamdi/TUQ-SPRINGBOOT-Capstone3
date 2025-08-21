@@ -40,7 +40,6 @@ public class LessorService {
         oldLessor.setPhoneNumber(lessor.getPhoneNumber());
         oldLessor.setOperatingRegions(lessor.getOperatingRegions());
         oldLessor.setContentRestrictions(lessor.getContentRestrictions());
-        oldLessor.setRatingAvg(lessor.getRatingAvg());
         lessorRepository.save(oldLessor);
     }
 
