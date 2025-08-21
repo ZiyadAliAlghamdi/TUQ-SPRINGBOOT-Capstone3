@@ -3,6 +3,8 @@ package org.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -43,6 +45,11 @@ public class Feedback {
 
     @Column(columnDefinition = "int not null")
     private Integer score;
+
+    @NotEmpty(message = "status cannot be null")
+    @Pattern(regexp = "opened|closed", message = "Status must be 'opened' or 'closed'")
+    @Column(columnDefinition = "varchar(255) not null")
+    private String status;
 
     @Column(columnDefinition = "varchar(255) not null")
     private String comment;

@@ -18,6 +18,10 @@ public class FeedbackService {
     private final LessorRepository lessorRepository;
     private final CampaignRepository campaignRepository;
     private final BookingRepository bookingRepository;
+
+    private final MailService mailService;
+
+
     public List<Feedback> getAllFeedback(){
         return feedbackRepository.findAll();
     }
@@ -70,6 +74,7 @@ public class FeedbackService {
         feedback.setLessor(lessor);
         feedback.setCampaign(campaign);
         feedback.setBooking(booking);
+        feedback.setStatus("opened");
         feedback.setType(feedbackDTO.getType());
         feedback.setScore(feedbackDTO.getScore());
         feedback.setComment(feedbackDTO.getComment());
@@ -105,5 +110,30 @@ public class FeedbackService {
             sum+= f.getScore();
         }
         return sum / lessor.getFeedbacks().size();
+    }
+
+    public List<Feedback> getOpenedFeedbacks(){
+        return feedbackRepository.getOpenedFeedbacks();
+    }
+
+
+    public void closingFeedback(Integer id, Mail mail){
+        Feedback feedback = feedbackRepository.findFeedbackById(id);
+
+        if (feedback == null){
+            throw new ApiException("feedback not found");
+        }
+
+        if (!feedback.getStatus().equalsIgnoreCase("opened")){
+            throw new ApiException("feedback is closed");
+        }
+
+        feedback.setStatus("closed");
+
+        mailService.sendWithoutAttachment(mail);
+    }
+
+    public List<Feedback> getClosedFeedback(){
+        return feedbackRepository.getClosedFeedbacks();
     }
 }

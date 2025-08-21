@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.example.capstone3.Api.ApiException;
 import org.example.capstone3.Model.Advertiser;
+import org.example.capstone3.Model.Campaign;
 import org.example.capstone3.Repository.AdvertiserRepository;
+import org.example.capstone3.Repository.CampaignRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,11 @@ import java.util.List;
 public class AdvertiserService {
 
     private final AdvertiserRepository advertiserRepository;
+    private final CampaignRepository campaignRepository;
+    private final OtpService otpService;
+    private final MailService mailService;
+
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -54,7 +61,30 @@ public class AdvertiserService {
         advertiserRepository.save(advertiser);
     }
 
-    public void updateAdvertiser(Integer id , Advertiser advertiser){
+    public void requestOtpForAdvertiserAction(Integer id, String actionType) {
+        Advertiser advertiser = advertiserRepository.findAdvertiserById(id);
+        if (advertiser == null) {
+            throw new ApiException("Advertiser with id " + id + " not found");
+        }
+        if (advertiser.getEmail() == null || advertiser.getEmail().isEmpty()) {
+            throw new ApiException("Advertiser email is not available to send OTP.");
+        }
+
+        String otp = otpService.generateOtp();
+        String otpKey = "ADVERTISER_" + id + "_" + actionType.toUpperCase();
+        otpService.storeOtp(otpKey, otp);
+
+        String subject = "OTP for Advertiser " + actionType + " - Capstone3";
+        String body = "Your One-Time Password for " + actionType + " operation is: " + otp + ". This OTP is valid for a short period.";
+        mailService.sendEmail(advertiser.getEmail(), subject, body);
+    }
+
+    public void updateAdvertiser(Integer id , Advertiser advertiser, String otp){
+        String otpKey = "ADVERTISER_" + id + "_UPDATE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for update.");
+        }
+
         Advertiser advertiser1 = advertiserRepository.findAdvertiserById(id);
         if (advertiser1 == null){
             throw new ApiException("Advertiser with id " + id + " not found");
@@ -66,11 +96,26 @@ public class AdvertiserService {
         advertiserRepository.save(advertiser1);
     }
 
-    public void deleteAdvertiser(Integer id){
+    public void deleteAdvertiser(Integer id, String otp){
+        String otpKey = "ADVERTISER_" + id + "_DELETE";
+        if (!otpService.verifyOtp(otpKey, otp)) {
+            throw new ApiException("Invalid or expired OTP for delete.");
+        }
+
         Advertiser advertiser = advertiserRepository.findAdvertiserById(id);
         if (advertiser == null){
             throw new ApiException("Advertiser with id " + id + " not found");
         }
         advertiserRepository.delete(advertiser);
+    }
+
+    public List<Campaign> getAdvertiserCampaign(Integer id){
+        Advertiser advertiser = advertiserRepository.findAdvertiserById(id);
+
+        if (advertiser == null){
+            throw new ApiException("Advertiser not found");
+        }
+
+        return campaignRepository.findCampaignByAdvertiser(advertiser);
     }
 }

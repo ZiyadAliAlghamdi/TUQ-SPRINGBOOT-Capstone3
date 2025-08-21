@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiResponse;
 import org.example.capstone3.DTO.FeedbackDTO;
 import org.example.capstone3.Model.Feedback;
+import org.example.capstone3.Model.Mail;
 import org.example.capstone3.Service.FeedbackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,4 +39,22 @@ public class FeedbackController {
         feedbackService.deleteFeedback(id);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback deleted successfully"));
     }
+
+    @GetMapping("/get/opened")
+    public ResponseEntity<?> getOpenedFeedbacks(){
+        return ResponseEntity.ok(feedbackService.getOpenedFeedbacks());
+    }
+
+    @PutMapping("/{id}/close")
+    public ResponseEntity<?> closingFeedback(@PathVariable Integer id, @RequestBody Mail mail){
+        feedbackService.closingFeedback(id, mail);
+        return ResponseEntity.status(200).body(new ApiResponse("feedback is closed"));
+    }
+
+    @GetMapping("/get/closed")
+    public ResponseEntity<?> getClosedFeedbacks(){
+        return ResponseEntity.ok(feedbackService.getClosedFeedback());
+    }
+
+
 }
