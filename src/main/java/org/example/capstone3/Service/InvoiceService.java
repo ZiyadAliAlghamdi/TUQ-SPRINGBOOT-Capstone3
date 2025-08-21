@@ -116,7 +116,7 @@ public class InvoiceService {
         inv.setBooking(booking);
         inv.setCardName(invoiceDTO.getCardName());
         inv.setCardNumber(invoiceDTO.getCardNumber());
-        inv.setCardCvc("**");
+        inv.setCardCvc(invoiceDTO.getCardCvc());
         inv.setCardMonth(invoiceDTO.getCardMonth());
         inv.setCardYear(invoiceDTO.getCardYear());
         inv.setAmount(booking.getPriceTotal());
