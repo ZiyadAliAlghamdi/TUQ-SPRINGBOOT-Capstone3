@@ -26,6 +26,8 @@ public class Advertiser {
     @Column(columnDefinition = "varchar(20) not null")
     private String companyName;
 
+    @Column(columnDefinition = "boolean")
+    private boolean isSubscribed=false;
     @NotEmpty(message = "brand name cannot be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String brandName;

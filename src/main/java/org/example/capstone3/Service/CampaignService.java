@@ -67,6 +67,9 @@ public class CampaignService {
     public String adviseCampaign(Integer id) {
         Campaign c = campaignRepository.findCampaignById(id);
         if (c == null) throw new ApiException("Campaign with id " + id + " not found");
+        if(!c.getAdvertiser().isSubscribed()){
+            throw new ApiException("AdviserNot Subscribed");
+        }
 
         String prompt = """
     أنت مستشار حملات للوحات الإعلانية في السعودية.
