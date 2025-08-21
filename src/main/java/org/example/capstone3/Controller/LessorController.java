@@ -38,14 +38,16 @@ public class LessorController {
         return ResponseEntity.status(200).body(new ApiResponse("Lessor deleted successfully"));
     }
 
-    @GetMapping("/get/pending")
-    public ResponseEntity<?> getLessorPendingBookings(){
-        return ResponseEntity.ok(lessorService.getPendingBookings());
+    @GetMapping("{id}/billboards")
+    public ResponseEntity<?> getBillboardByLessor(@PathVariable Integer id){
+        return ResponseEntity.ok(lessorService.getLessorBillboards(id));
     }
 
-    @PostMapping("/remind-pending")
-    public ResponseEntity<?> remindPendingBookings(){
-        lessorService.remindPendingBooking();
-        return ResponseEntity.ok(new ApiResponse("Reminders sent successfully"));
+    @GetMapping("{id}/invoices")
+    public ResponseEntity<?> getLessorInvoices(@PathVariable Integer id){
+        return ResponseEntity.ok(lessorService.getLessorInvoices(id));
     }
+
+
+
 }

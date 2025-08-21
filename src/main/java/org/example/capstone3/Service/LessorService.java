@@ -2,9 +2,13 @@ package org.example.capstone3.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.capstone3.Api.ApiException;
+import org.example.capstone3.Model.Billboard;
 import org.example.capstone3.Model.Booking;
+import org.example.capstone3.Model.Invoice;
 import org.example.capstone3.Model.Lessor;
+import org.example.capstone3.Repository.BillboardRepository;
 import org.example.capstone3.Repository.BookingRepository;
+import org.example.capstone3.Repository.InvoiceRepository;
 import org.example.capstone3.Repository.LessorRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,9 @@ public class LessorService {
 
     private final LessorRepository lessorRepository;
     private final BookingRepository bookingRepository;
+    private final BillboardRepository billboardRepository;
+    private final InvoiceRepository invoiceRepository;
+
     private final WhatsAppService whatsAppService;
 
 
@@ -51,8 +58,25 @@ public class LessorService {
         lessorRepository.delete(lessor);
     }
 
-    public List<Booking> getPendingBookings(){
-        return bookingRepository.findLessorPendingBookings();
+
+    public List<Billboard> getLessorBillboards(Integer id){
+        Lessor lessor = lessorRepository.findLessorById(id);
+
+        if (lessor == null){
+            throw new ApiException("lessor not found");
+        }
+
+        return billboardRepository.findBillboardByLessor(lessor.getId());
+    }
+
+    public List<Invoice> getLessorInvoices(Integer lessorId){
+        Lessor lessor = lessorRepository.findLessorById(lessorId);
+
+        if (lessor == null){
+            throw new ApiException("lessor not found");
+        }
+
+        return invoiceRepository.findInvoiceByLessor(lessor.getId());
     }
 
     @Scheduled(cron = "0 0 0 * * *")

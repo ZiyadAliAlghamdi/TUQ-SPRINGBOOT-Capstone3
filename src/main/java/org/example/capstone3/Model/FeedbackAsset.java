@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +38,7 @@ public class FeedbackAsset {
     @Column(columnDefinition = "LONGBLOB",nullable = false)
     private byte[] fileContent;
 
+    @CreationTimestamp
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime createdAt;
 }

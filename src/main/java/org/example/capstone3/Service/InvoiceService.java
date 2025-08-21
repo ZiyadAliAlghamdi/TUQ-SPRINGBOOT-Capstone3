@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,10 @@ public class InvoiceService {
 
     private static final String MOYASAR_API_URL = "https://api.moyasar.com/v1/payments";
 
+
+    public List<Invoice> getAllInvoices(){
+        return invoiceRepository.findAll();
+    }
 
 
     public String getPaymentStatus(String paymentId){
@@ -59,9 +64,9 @@ public class InvoiceService {
 
 
 
-    public ResponseEntity<String> processPayment(InvoiceDTO invoiceDTO){
+    public ResponseEntity<String> processPayment(Integer bookingId ,InvoiceDTO invoiceDTO){
 
-        Booking booking = bookingRepository.findBookingById(invoiceDTO.getBookingId());
+        Booking booking = bookingRepository.findBookingById(bookingId);
 
         if (booking ==  null){
             throw new ApiException("booking is not found");

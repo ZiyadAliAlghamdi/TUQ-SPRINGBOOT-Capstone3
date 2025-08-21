@@ -14,9 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InvoiceDTO {
 
-    @NotNull(message = "bookingId cannot be null")
-    private Integer bookingId;
-
     @NotEmpty(message = "cardName cannot be empty")
     private String cardName;
 

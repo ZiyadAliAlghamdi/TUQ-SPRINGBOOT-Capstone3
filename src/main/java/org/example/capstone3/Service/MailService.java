@@ -3,7 +3,8 @@ package org.example.capstone3.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.example.capstone3.Model.Mail;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,14 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
     private final JavaMailSender mailSender;
+
+    public void sendWithoutAttachment(Mail mail) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(mail.getTo());
+        message.setSubject(mail.getSubject());
+        message.setText(mail.getText());
+        mailSender.send(message);
+    }
 
     public void sendWithAttachment(String from,
                                    String to,

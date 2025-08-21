@@ -1,6 +1,7 @@
 package org.example.capstone3.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.capstone3.Api.ApiResponse;
 import org.example.capstone3.DTO.InvoiceDTO;
 import org.example.capstone3.Service.InvoiceService;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,10 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
 
-    @PostMapping("/pay")
-    public ResponseEntity<?> processPayment(@RequestBody InvoiceDTO invoiceDTO){
-        return ResponseEntity.status(200).body(invoiceService.processPayment(invoiceDTO));
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllInvoices(){
+        return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
     @GetMapping("/get_status/{id}")
@@ -24,12 +26,18 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(invoiceService.getPaymentStatus(id));
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<String> handlePaymentCallback(@RequestParam String id,
+    @PostMapping("/pay/{bookingId}")
+    public ResponseEntity<?> processPayment(@PathVariable Integer bookingId,@RequestBody InvoiceDTO invoiceDTO){
+        return ResponseEntity.status(200).body(invoiceService.processPayment(bookingId,invoiceDTO));
+    }
+
+
+    @PutMapping("/callback")
+    public ResponseEntity<?> handlePaymentCallback(@RequestParam String id,
                                                         @RequestParam String status,
                                                         @RequestParam String amount,
                                                         @RequestParam String message) {
         invoiceService.handlePaymentCallback(id, status, amount, message);
-        return ResponseEntity.ok("Callback received");
+        return ResponseEntity.status(200).body(new ApiResponse("Payment status("+status+")"));
     }
 }

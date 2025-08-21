@@ -43,7 +43,7 @@ public class BookingController {
         return ResponseEntity.status(200).body(bookingService.findPendingBookings(lessorId));
     }
 
-    @PostMapping("/{lessorId}/bookings/{bookingId}/accept")
+    @PutMapping("/{lessorId}/bookings/{bookingId}/accept")
     public ResponseEntity<?> acceptBooking(@PathVariable Integer lessorId, @PathVariable Integer bookingId) {
         bookingService.acceptBooking(lessorId, bookingId);
         return ResponseEntity.status(200).body(new ApiResponse("Booking Accepted"));
