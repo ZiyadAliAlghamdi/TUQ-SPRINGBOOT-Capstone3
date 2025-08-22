@@ -40,18 +40,18 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(new ApiResponse("Feedback deleted successfully"));
     }
 
-    @GetMapping("/get/opened")
+    @GetMapping("/get/opened")  //todo: me
     public ResponseEntity<?> getOpenedFeedbacks(){
         return ResponseEntity.ok(feedbackService.getOpenedFeedbacks());
     }
 
-    @PutMapping("/{id}/close")
+    @PutMapping("/{id}/close") //todo: me
     public ResponseEntity<?> closingFeedback(@PathVariable Integer id, @RequestBody Mail mail){
         feedbackService.closingFeedback(id, mail);
         return ResponseEntity.status(200).body(new ApiResponse("feedback is closed"));
     }
 
-    @GetMapping("/get/closed")
+    @GetMapping("/get/closed")  //todo: me
     public ResponseEntity<?> getClosedFeedbacks(){
         return ResponseEntity.ok(feedbackService.getClosedFeedback());
     }

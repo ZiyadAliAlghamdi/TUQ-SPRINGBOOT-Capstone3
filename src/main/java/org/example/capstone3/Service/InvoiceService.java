@@ -27,7 +27,7 @@ public class InvoiceService {
     private final BookingRepository bookingRepository;
     private final AdvertiserRepository advertiserRepository;
     private final MailService mailService;
-    private final InvoicePdfBuilder invoicePdfBuilder;
+    private final InvoicePdfService invoicePdfService;
 
     @Value("${moyasar.api.key}")
     private String apiKey;
@@ -38,6 +38,16 @@ public class InvoiceService {
     public List<Invoice> getAllInvoices(){
         return invoiceRepository.findAll();
     }
+
+    public Invoice getInvoiceById(Integer id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        if (invoice == null) {
+            throw new ApiException("Invoice not found");
+        }
+        return invoice;
+    }
+
+
 
 
     public String getPaymentStatus(String paymentId){
@@ -142,16 +152,7 @@ public class InvoiceService {
         String to = adv.getEmail();
 
 
-
-        byte[] pdf = invoicePdfBuilder.build(
-                inv,
-                adv,
-                String.valueOf(booking.getId()),
-                paymentId,
-                brand,
-                masked
-        );
-
+        byte[] pdf = invoicePdfService.generateInvoicePdf(inv.getBooking(), inv);
 
         String subject = "Payment Receipt - Booking #" + booking.getId();
         String body = """
@@ -163,7 +164,7 @@ public class InvoiceService {
           <li><b>Status:</b> %s</li>
           <li><b>Payment ID:</b> %s</li>
         </ul>
-        <p>please continue your payment process here: <a href=\"%%s\">%%s</a></p>
+        <p>Please continue your payment process here: <a href=\"%%s\">%%s</a></p>
         <p>The receipt PDF is attached.</p>
         """.formatted(adv.getCompanyName(),
                 booking.getId(),
@@ -270,8 +271,7 @@ public class InvoiceService {
 
         invoiceRepository.save(inv);
 
-        byte[] pdf = invoicePdfBuilder.build(inv, adv, "SUB-" + adv.getId(), paymentId, brand, masked);
-
+        byte[] pdf = invoicePdfService.generateInvoicePdf(inv.getBooking(), inv);
         String body = """
       <p>Dear %s,</p>
       <p>Thanks! We started your subscription payment.</p>
@@ -290,7 +290,7 @@ public class InvoiceService {
                 inv.getStatus(),
                 paymentId == null ? "-" : paymentId,
                 (transactionUrl != null && "initiated".equalsIgnoreCase(status))
-                        ? ("<p>Please complete your payment here: <a href=\"%s\">%s</a></p>"
+                        ? ("<p>Please complete your payment here: <a href=\"%%s\">%%s</a></p>"
                         .formatted(transactionUrl, transactionUrl))
                         : ""
         );

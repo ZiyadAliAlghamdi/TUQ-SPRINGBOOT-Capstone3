@@ -160,6 +160,15 @@ public class BookingService {
 
         lessorRepository.save(lessor);
         bookingRepository.save(booking);
+
+        String subject = "Booking #" + booking.getId() + " has been accepted!";
+        String body = "Your booking for billboard #" + booking.getBillboard().getId() + " from " + booking.getStartDate() + " to " + booking.getEndDate() + " has been accepted by the lessor. " +
+                "Please proceed with the payment of " + booking.getPriceTotal() + " to finalize your booking.";
+        Mail mail = new Mail();
+        mail.setTo(booking.getCampaign().getAdvertiser().getEmail());
+        mail.setSubject(subject);
+        mail.setText(body);
+        mailService.sendWithoutAttachment(mail);
     }
 
     //Helper Method

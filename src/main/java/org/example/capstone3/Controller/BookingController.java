@@ -26,7 +26,7 @@ public class BookingController {
         return ResponseEntity.status(200).body(new ApiResponse("Booking added successfully"));
     }
 
-    @PostMapping("/request-otp/{id}/{actionType}")
+    @PostMapping("/request-otp/{id}/{actionType}")  //todo: me
     public ResponseEntity<?> requestBookingOtp(@PathVariable Integer id, @PathVariable String actionType) {
         bookingService.requestOtpForBookingAction(id, actionType);
         return ResponseEntity.status(200).body(new ApiResponse("OTP requested successfully"));
@@ -44,12 +44,12 @@ public class BookingController {
         return ResponseEntity.status(200).body(new ApiResponse("Booking deleted successfully"));
     }
 
-    @GetMapping("/{lessorId}/bookings/pending")
+    @GetMapping("/{lessorId}/bookings/pending") //todo: me
     public ResponseEntity<?> getPendingBookings(@PathVariable Integer lessorId) {
         return ResponseEntity.status(200).body(bookingService.findPendingBookings(lessorId));
     }
 
-    @PutMapping("/{lessorId}/bookings/{bookingId}/accept")
+    @PutMapping("/{lessorId}/bookings/{bookingId}/accept")  //todo: me
     public ResponseEntity<?> acceptBooking(@PathVariable Integer lessorId, @PathVariable Integer bookingId, @RequestParam String otp) {
         bookingService.acceptBooking(lessorId, bookingId, otp);
         return ResponseEntity.status(200).body(new ApiResponse("Booking Accepted"));

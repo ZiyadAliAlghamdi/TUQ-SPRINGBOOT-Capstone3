@@ -27,7 +27,7 @@ public class AdvertiserController {
         return ResponseEntity.status(200).body(new ApiResponse("Advertiser added successfully"));
     }
 
-    @PostMapping("/request-otp/{id}/{actionType}")
+    @PostMapping("/request-otp/{id}/{actionType}")  //todo: me
     public ResponseEntity<?> requestOtpForAdvertiserAction(@PathVariable Integer id, @PathVariable String actionType) {
         advertiserService.requestOtpForAdvertiserAction(id, actionType);
         return ResponseEntity.status(200).body(new ApiResponse("OTP requested successfully. Check advertiser's email."));
@@ -46,7 +46,7 @@ public class AdvertiserController {
     }
 
 
-    @GetMapping("{id}/campaigns")
+    @GetMapping("{id}/campaigns")   //todo: me
     public ResponseEntity<?> getAdvertiserCampaigns(@PathVariable Integer id){
         return ResponseEntity.status(200).body(advertiserService.getAdvertiserCampaign(id));
     }

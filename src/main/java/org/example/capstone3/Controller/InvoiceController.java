@@ -22,12 +22,17 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
-    @GetMapping("/get_status/{id}")
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getInvoiceById(@PathVariable Integer id){
+        return ResponseEntity.ok(invoiceService.getInvoiceById(id));
+    }
+
+    @GetMapping("/get_status/{id}") //todo: me
     public ResponseEntity<?> getPaymentStatus(@PathVariable String id){
         return ResponseEntity.status(HttpStatus.OK).body(invoiceService.getPaymentStatus(id));
     }
 
-    @PostMapping("/pay/{bookingId}")
+    @PostMapping("/pay/{bookingId}")    //todo: me
     public ResponseEntity<?> processPaymentBooking(@PathVariable Integer bookingId,@RequestBody InvoiceDTO invoiceDTO){
         return ResponseEntity.status(200).body(invoiceService.processPayment(bookingId,invoiceDTO));
     }
@@ -38,7 +43,7 @@ public class InvoiceController {
     }
 
 
-    @PutMapping("/callback")
+    @PutMapping("/callback")    //todo: me
     public ResponseEntity<?> handlePaymentCallback(@RequestParam String id,
                                                         @RequestParam String status,
                                                         @RequestParam String amount,
@@ -46,4 +51,5 @@ public class InvoiceController {
         invoiceService.handlePaymentCallback(id, status, amount, message);
         return ResponseEntity.status(200).body(new ApiResponse("Payment status("+status+")"));
     }
+
 }
