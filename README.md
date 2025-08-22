@@ -58,21 +58,21 @@
 
 #### /api/v1/lessor
 
-1. Request OTP for Lessor Action
+3. Request OTP for Lessor Action
     * Full Path: /api/v1/lessor/request-otp/{id}/{actionType}
     * HTTP Method: POST
     * Details: This endpoint requests an OTP for a specific lessor action. It takes the lessor id and actionType from the path
       variables. It uses lessorService.requestOtpForLessorAction and returns an ApiResponse.
     * Using: Java Random Class with Map
 
-2. Get Billboards by Lessor
+4. Get Billboards by Lessor
     * Full Path: /api/v1/lessor/{id}/billboards
     * HTTP Method: GET
     * Details: This endpoint retrieves all billboards associated with a specific lessor. It takes the lessor id from the path
       variable. It uses lessorService.getLessorBillboards and returns a list of billboards.
     * Using: Hibernate with JPA Repositories
 
-3. Get Lessor Invoices
+5. Get Lessor Invoices
     * Full Path: /api/v1/lessor/{id}/invoices
     * HTTP Method: GET
     * Details: This endpoint retrieves all invoices associated with a specific lessor. It takes the lessor id from the path
@@ -84,7 +84,7 @@
 
 #### /api/v1/invoice
 
-1. Get Payment Status
+6. Get Payment Status
     * Full Path: /api/v1/invoice/get_status/{id}
     * HTTP Method: GET
     * Details: This endpoint retrieves the payment status of an invoice. It takes the invoice id from the path variable. It uses
@@ -92,14 +92,14 @@
     * Using: Spring Framework HttpHeaders with Moyasar payment Api
 
 
-2. Process Payment for Booking
+7. Process Payment for Booking
     * Full Path: /api/v1/invoice/pay/{bookingId}
     * HTTP Method: POST
     * Details: This endpoint processes payment for a booking. It takes the bookingId from the path variable and an InvoiceDTO from
       the request body. It uses invoiceService.processPayment and returns the result of the payment process.
     * Using: Spring Framework HttpHeaders with Moyasar payment Api, Jakarta Mail with Gmail SMTP, Adobe PDF Services API. 
 
-3. Handle Payment Callback
+8. Handle Payment Callback
     * Full Path: /api/v1/invoice/callback
     * HTTP Method: PUT
     * Details: This endpoint handles payment callbacks. It takes id, status, amount, and message as request parameters. It uses
@@ -111,21 +111,21 @@
 
 #### /api/v1/feedback
 
-1. Get Opened Feedbacks
+9. Get Opened Feedbacks
     * Full Path: /api/v1/feedback/get/opened
     * HTTP Method: GET
     * Details: This endpoint retrieves all opened feedbacks. It uses feedbackService.getOpenedFeedbacks and returns a list of
       feedbacks.
     *  Using: Hibernate with JPA Repositories.
 
-2. Closing Feedback
+10. Closing Feedback
     * Full Path: /api/v1/feedback/{id}/close
     * HTTP Method: PUT
     * Details: This endpoint closes a feedback identified by its id. It takes the id from the path variable and a Mail object from
       the request body. It uses feedbackService.closingFeedback and returns an ApiResponse.
     * Using: Jakarta Mail with Gmail SMTP and Hibernate with JPA Repositories
 
-3. Get Closed Feedbacks
+11. Get Closed Feedbacks
     * Full Path: /api/v1/feedback/get/closed
     * HTTP Method: GET
     * Details: This endpoint retrieves all closed feedbacks. It uses feedbackService.getClosedFeedback and returns a list of
@@ -137,21 +137,21 @@
 
 #### /api/v1/booking
 
-1. Request OTP for Booking Action
+12. Request OTP for Booking Action
     * Full Path: /api/v1/booking/request-otp/{id}/{actionType}
     * HTTP Method: POST
     * Details: This endpoint requests an OTP for a specific booking action. It takes the booking id and actionType from the path
       variables. It uses bookingService.requestOtpForBookingAction and returns an ApiResponse.
     * Using: Java Random Class with Map
 
-2. Get Pending Bookings
+13. Get Pending Bookings
     * Full Path: /api/v1/booking/{lessorId}/bookings/pending
     * HTTP Method: GET
     * Details: This endpoint retrieves all pending bookings for a specific lessor. It takes the lessorId from the path variable. It
       uses bookingService.findPendingBookings and returns a list of pending bookings.
     * APIs Used: Hibernate with JPA Repositories.
 
-3. Accept Booking
+14. Accept Booking
     * Full Path: /api/v1/booking/{lessorId}/bookings/{bookingId}/accept
     * HTTP Method: PUT
     * Details: This endpoint accepts a booking for a specific lessor. It takes the lessorId and bookingId from the path variables
