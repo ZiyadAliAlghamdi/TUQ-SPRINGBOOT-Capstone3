@@ -97,7 +97,7 @@
     * HTTP Method: POST
     * Details: This endpoint processes payment for a booking. It takes the bookingId from the path variable and an InvoiceDTO from
       the request body. It uses invoiceService.processPayment and returns the result of the payment process.
-    * Using: Spring Framework HttpHeaders with Moyasar payment Api, Jakarta Mail with Gmail SMTP, Adobe PDF Services API. 
+    * Using: Spring Framework HttpHeaders with RestTemplate, Moyasar payment Api, Jakarta Mail with Gmail SMTP, Adobe PDF Services API. 
 
 8. Handle Payment Callback
     * Full Path: /api/v1/invoice/callback
@@ -176,7 +176,7 @@ This section outlines the methods annotated with `@Scheduled` that run automatic
 
 # External APIs Used
 
-<img src="docs/images/mermaid-diagram-2025-08-23-010115.png">
+<img src="docs/images/systemServices.png">
 
 * **Wathq API (وثق)** → للتحقق من السجل التجاري إذا كان نشطًا أم لا.
 
